@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobSeed Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: #f0fdf4;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            background: #16a34a;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .jobs, .applications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card, .app-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .pending { color: orange; }
+        .accepted { color: green; }
+        .rejected { color: red; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">🌱 JobSeed</div>
+        <div class="nav-links">
+            <a href="#jobs">Jobs</a>
+            <a href="#applications">My Applications</a>
+        </div>
+    </div>
+
+    <div id="jobs" class="container">
+        <h1>Available Jobs</h1>
+        <div class="jobs">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb">
+                <b>Barista Assistant</b><br>
+                Bean There Café<br>
+                ฿500/day
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f">
+                <b>Retail Helper</b><br>
+                SportZone<br>
+                ฿550/day
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1558944351-c3c14e1d5c1f">
+                <b>Dog Walker</b><br>
+                Happy Paws<br>
+                ฿400/day
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836">
+                <b>Restaurant Helper</b><br>
+                Thai Spice Kitchen<br>
+                ฿600/day
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7">
+                <b>Bookstore Assistant</b><br>
+                Read & Relax<br>
+                ฿480/day
+            </div>
+        </div>
+    </div>
+
+    <div id="applications" class="container">
+        <h1>My Applications</h1>
+        <div class="applications">
+            <div class="app-card">
+                <b>Barista Assistant</b><br>
+                Bean There Café
+                <div class="status pending">Status: Pending</div>
+            </div>
+            <div class="app-card">
+                <b>Retail Helper</b><br>
+                SportZone
+                <div class="status accepted">Status: Accepted 🎉</div>
+            </div>
+            <div class="app-card">
+                <b>Dog Walker</b><br>
+                Happy Paws
+                <div class="status rejected">Status: Rejected</div>
+            </div>
+        </div>
+    </div>
+</

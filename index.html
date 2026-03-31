@@ -1,143 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobSeed Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            background: #f0fdf4;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobSeed</title>
 
-        .navbar {
-            background: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-        .logo {
-            font-weight: bold;
-            color: #16a34a;
-        }
+<style>
+body { font-family: 'Inter', sans-serif; margin:0; background:#f0fdf4; }
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
+.navbar {
+    background:white; padding:15px; display:flex;
+    justify-content:space-between; flex-wrap:wrap;
+}
+.logo { color:#16a34a; font-weight:bold; }
 
-        .nav-links a {
-            text-decoration: none;
-            color: white;
-            background: #16a34a;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
+.nav-links a {
+    background:#16a34a; color:white; padding:8px;
+    border-radius:8px; text-decoration:none; margin-left:5px;
+}
 
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+.container { max-width:1100px; margin:25px auto; padding:15px; }
 
-        .jobs, .applications {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
+.jobs,.applications {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:15px;
+}
 
-        .card, .app-card {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-        }
+.card,.app-card {
+    background:white; padding:12px; border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
 
-        .card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 10px 10px 0 0;
-            margin-bottom: 10px;
-        }
+.card img { width:100%; height:140px; object-fit:cover; border-radius:10px; }
 
-        .status {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
+.btn { margin-top:6px; padding:6px; border:none; border-radius:8px; cursor:pointer; }
+.apply { background:#16a34a; color:white; }
+.save { background:#e5e7eb; }
+.saved { background:gold; }
 
-        .pending { color: orange; }
-        .accepted { color: green; }
-        .rejected { color: red; }
-    </style>
+.status { margin-top:5px; font-size:0.85rem; }
+.pending { color:orange; }
+.accepted { color:green; }
+.rejected { color:red; }
+
+/* SEARCH */
+.search input {
+    width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;
+}
+
+/* CHAT */
+.chat-container { display:flex; background:white; border-radius:12px; overflow:hidden; margin-top:20px; }
+.chat-list { width:30%; border-right:1px solid #eee; }
+.chat-user { padding:10px; cursor:pointer; }
+.chat-user.active { background:#dcfce7; }
+
+.chat-box { width:70%; display:flex; flex-direction:column; }
+.chat-header { background:#16a34a; color:white; padding:10px; }
+
+.chat-messages { height:200px; overflow-y:auto; padding:10px; }
+
+.msg { padding:6px 10px; border-radius:10px; margin:5px 0; max-width:70%; }
+.user { background:#16a34a; color:white; margin-left:auto; }
+.business { background:#f1f5f9; }
+
+.chat-input { display:flex; }
+.chat-input input { flex:1; padding:10px; border:none; }
+.chat-input button { background:#16a34a; color:white; border:none; padding:10px; }
+
+/* MODAL */
+.modal {
+    display:none; position:fixed; top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.4);
+    justify-content:center; align-items:center;
+}
+
+.modal-content {
+    background:white; padding:20px; border-radius:12px;
+    width:300px; display:flex; flex-direction:column; gap:10px;
+}
+
+.modal-content input {
+    padding:10px; border-radius:8px; border:1px solid #ddd;
+}
+
+.cancel { background:#ef4444; color:white; }
+</style>
 </head>
+
 <body>
-    <div class="navbar">
-        <div class="logo">🌱 JobSeed</div>
-        <div class="nav-links">
-            <a href="#jobs">Jobs</a>
-            <a href="#applications">My Applications</a>
-        </div>
-    </div>
 
-    <div id="jobs" class="container">
-        <h1>Available Jobs</h1>
-        <div class="jobs">
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb">
-                <b>Barista Assistant</b><br>
-                Bean There Café<br>
-                ฿500/day
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f">
-                <b>Retail Helper</b><br>
-                SportZone<br>
-                ฿550/day
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1558944351-c3c14e1d5c1f">
-                <b>Dog Walker</b><br>
-                Happy Paws<br>
-                ฿400/day
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836">
-                <b>Restaurant Helper</b><br>
-                Thai Spice Kitchen<br>
-                ฿600/day
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7">
-                <b>Bookstore Assistant</b><br>
-                Read & Relax<br>
-                ฿480/day
-            </div>
-        </div>
+<div class="navbar">
+    <div class="logo">🌱 JobSeed</div>
+    <div class="nav-links">
+        <a href="#jobs">Jobs</a>
+        <a href="#applications">Applications</a>
+        <a href="#chat">Chat</a>
     </div>
+</div>
 
-    <div id="applications" class="container">
-        <h1>My Applications</h1>
-        <div class="applications">
-            <div class="app-card">
-                <b>Barista Assistant</b><br>
-                Bean There Café
-                <div class="status pending">Status: Pending</div>
-            </div>
-            <div class="app-card">
-                <b>Retail Helper</b><br>
-                SportZone
-                <div class="status accepted">Status: Accepted 🎉</div>
-            </div>
-            <div class="app-card">
-                <b>Dog Walker</b><br>
-                Happy Paws
-                <div class="status rejected">Status: Rejected</div>
+<div id="jobs" class="container">
+    <h1>Jobs</h1>
+    <div class="search">
+        <input placeholder="Search jobs..." onkeyup="searchJobs(this.value)">
+    </div>
+    <div id="jobList" class="jobs"></div>
+</div>
+
+<div id="applications" class="container">
+    <h1>Applications</h1>
+    <div id="appList" class="applications"></div>
+</div>
+
+<div id="chat" class="container">
+    <h1>Messages</h1>
+    <div class="chat-container">
+        <div id="chatUsers" class="chat-list"></div>
+
+        <div class="chat-box">
+            <div id="chatTitle" class="chat-header">Select Chat</div>
+            <div id="chatMessages" class="chat-messages"></div>
+
+            <div class="chat-input">
+                <input id="msgInput" placeholder="Message">
+                <button onclick="sendMsg()">Send</button>
             </div>
         </div>
     </div>
-</
+</div>
+
+<!-- MODAL -->
+<div id="applyModal" class="modal">
+    <div class="modal-content">
+        <h2 id="jobTitleModal">Apply</h2>
+
+        <input id="appName" placeholder="Your Name">
+        <input id="appAge" placeholder="Your Age">
+
+        <div id="extraQuestions"></div>
+
+        <input type="file" id="resumeUpload">
+        <input id="appTime" placeholder="Availability">
+
+        <button onclick="submitApplication()">Submit</button>
+        <button onclick="closeModal()" class="cancel">Cancel</button>
+    </div>
+</div>
+
+<script>
+const jobs=[
+{title:"Barista Assistant",company:"Bean There Café",pay:"฿500/day",img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800"},
+{title:"Retail Helper",company:"SportZone",pay:"฿550/day",img:"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800"},
+{title:"Dog Walker",company:"Happy Paws",pay:"฿400/day",img:"https://images.unsplash.com/photo-1558944351-c3c14e1d5c1f?auto=format&fit=crop&w=800"}
+];
+
+let saved=JSON.parse(localStorage.getItem("saved"))||[];
+let applications=JSON.parse(localStorage.getItem("apps"))||[];
+let chats=JSON.parse(localStorage.getItem("chats"))||{};
+let currentChat=null;
+let selectedJob=null;
+
+function renderJobs(list=jobs){
+let html="";
+list.forEach(j=>{
+html+=`
+<div class="card">
+<img src="${j.img}">
+<b>${j.title}</b><br>${j.company}<br>${j.pay}<br>
+<button class="btn apply" onclick='applyJob(${JSON.stringify(j)})'>Apply</button>
+<button class="btn save ${saved.includes(j.title)?"saved":""}" onclick='saveJob("${j.title}")'>❤️</button>
+</div>`;
+});
+document.getElementById("jobList").innerHTML=html;
+}
+
+function saveJob(t){
+saved.includes(t)?saved=saved.filter(x=>x!==t):saved.push(t);
+localStorage.setItem("saved",JSON.stringify(saved));
+renderJobs();
+}
+
+function searchJobs(q){
+renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
+}
+
+function applyJob(job){
+selectedJob=job;
+document.getElementById("applyModal").style.display="flex";
+document.getElementById("jobTitleModal").innerText="Apply: "+job.title;
+
+let q="";
+if(job.title.includes("Barista")){
+q=`<input id="q1" placeholder="Coffee experience?"><input id="q2" placeholder="Favorite drink?">`;
+}
+else if(job.title.includes("Retail")){
+q=`<input id="q1" placeholder="Customer service experience?"><input id="q2" placeholder="Cashier skills?">`;
+}
+else if(job.title.includes("Dog")){
+q=`<input id="q1" placeholder="Pet experience?"><input id="q2" placeholder="Large dogs ok?">`;
+}
+else{
+q=`<input id="q1" placeholder="Why do you want this job?">`;
+}
+document.getElementById("extraQuestions").innerHTML=q;
+}
+
+function closeModal(){
+document.getElementById("applyModal").style.display="none";
+}
+
+function submitApplication(){
+let name=appName.value;
+let age=appAge.value;
+let time=appTime.value;
+
+if(!name||!age||!time)return alert("Fill required");
+
+let file=document.getElementById("resumeUpload").files[0];
+let resume=file?file.name:"None";
+
+applications.push({
+...selectedJob,
+applicant:name,
+resume,
+status:"pending"
+});
+
+localStorage.setItem("apps",JSON.stringify(applications));
+
+closeModal();
+renderApps();
+renderUsers();
+}
+
+function renderApps(){
+let html="";
+applications.forEach((a,i)=>{
+html+=`
+<div class="app-card">
+<b>${a.title}</b><br>${a.company}<br>
+👤 ${a.applicant}<br>📎 ${a.resume}
+<div class="status ${a.status}">${a.status}</div>
+<button onclick="updateStatus(${i},'accepted')" class="btn apply">Accept</button>
+<button onclick="updateStatus(${i},'rejected')" class="btn cancel">Reject</button>
+</div>`;
+});
+appList.innerHTML=html;
+}
+
+function updateStatus(i,s){
+applications[i].status=s;
+localStorage.setItem("apps",JSON.stringify(applications));
+renderApps();
+}
+
+function renderUsers(){
+let html="";
+applications.forEach(a=>{
+html+=`<div class="chat-user" onclick="openChat('${a.company}')">${a.company}</div>`;
+});
+chatUsers.innerHTML=html;
+}
+
+function openChat(name){
+currentChat=name;
+chatTitle.innerText=name;
+let msgs=chats[name]||[];
+let html="";
+msgs.forEach(m=>html+=`<div class="msg ${m.type}">${m.text}</div>`);
+chatMessages.innerHTML=html;
+}
+
+function sendMsg(){
+let text=msgInput.value.trim();
+if(!text||!currentChat)return;
+
+if(!chats[currentChat])chats[currentChat]=[];
+
+chats[currentChat].push({text,type:"user"});
+chats[currentChat].push({text:"We'll reply soon!",type:"business"});
+
+localStorage.setItem("chats",JSON.stringify(chats));
+
+msgInput.value="";
+openChat(currentChat);
+}
+
+renderJobs();
+renderApps();
+renderUsers();
+</script>
+
+</body>
+</html>

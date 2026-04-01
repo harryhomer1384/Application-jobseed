@@ -3,154 +3,262 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JobSeed Pro</title>
+<title>JobSeed Ultimate</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
-body {
-    margin:0;
-    font-family:'Inter',sans-serif;
-    background:linear-gradient(135deg,#ecfdf5,#dcfce7);
+
+/* =========================
+GLOBAL
+========================= */
+body{
+margin:0;
+font-family:'Inter',sans-serif;
+background:linear-gradient(135deg,#ecfdf5,#dcfce7);
 }
 
-/* NAVBAR */
-.navbar {
-    position:sticky;
-    top:0;
-    background:white;
-    padding:15px 25px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 5px 20px rgba(0,0,0,0.05);
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
 }
 
-/* BUTTON */
-.btn {
-    padding:10px 16px;
-    border:none;
-    border-radius:12px;
-    background:linear-gradient(135deg,#16a34a,#22c55e);
-    color:white;
-    font-weight:600;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    cursor:pointer;
-    box-shadow:0 6px 20px rgba(34,197,94,0.3);
-    transition:0.25s;
-}
-.btn:hover {
-    transform:translateY(-2px);
+/* =========================
+NAVBAR
+========================= */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 25px;
+background:white;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+position:sticky;
+top:0;
+z-index:1000;
 }
 
-/* HERO */
-.hero {
-    text-align:center;
-    padding:60px 20px;
-}
-.hero h1 {
-    font-size:42px;
-}
-.hero span { color:#16a34a; }
-
-/* LAYOUT */
-.container { max-width:1200px; margin:auto; padding:20px; }
-.layout { display:flex; gap:20px; }
-#jobList { width:50%; }
-#mapContainer { width:50%; }
-
-/* CARD */
-.card {
-    background:white;
-    border-radius:18px;
-    padding:14px;
-    margin-bottom:12px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
-    transition:0.3s;
-}
-.card:hover {
-    transform:translateY(-6px);
-}
-.card img {
-    width:100%;
-    height:140px;
-    object-fit:cover;
-    border-radius:10px;
+.btn{
+padding:10px 16px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#16a34a,#22c55e);
+color:white;
+display:inline-flex;
+align-items:center;
+gap:8px;
+cursor:pointer;
+font-weight:600;
+transition:0.2s;
 }
 
-/* POPUP */
-.popup {
-    display:none;
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.4);
-    justify-content:center;
-    align-items:center;
-}
-.popup-box {
-    background:white;
-    padding:20px;
-    border-radius:16px;
-    width:90%;
-    max-width:700px;
+.btn:hover{
+transform:translateY(-2px);
 }
 
-/* CHAT */
-.chat-style { display:flex; height:400px; }
-.chat-sidebar { width:30%; border-right:1px solid #eee; overflow-y:auto; }
-.chat-main { width:70%; display:flex; flex-direction:column; }
-.chat-messages { flex:1; padding:10px; overflow-y:auto; }
-.msg { padding:8px; border-radius:10px; margin:5px 0; max-width:70%; }
-.user { background:#16a34a; color:white; margin-left:auto; }
-.business { background:#eee; }
+/* =========================
+HERO
+========================= */
+.hero{
+text-align:center;
+padding:60px 20px;
+}
 
-/* MOBILE */
+.hero h1{
+font-size:42px;
+}
+
+.hero span{
+color:#16a34a;
+}
+
+/* =========================
+LAYOUT
+========================= */
+.layout{
+display:flex;
+gap:20px;
+}
+
+#jobList{width:50%;}
+#mapContainer{width:50%;}
+
+/* =========================
+CARD
+========================= */
+.card{
+background:white;
+border-radius:18px;
+padding:14px;
+margin-bottom:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.card img{
+width:100%;
+height:140px;
+object-fit:cover;
+border-radius:10px;
+}
+
+/* =========================
+POPUPS
+========================= */
+.popup{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+justify-content:center;
+align-items:center;
+}
+
+.popup-box{
+background:white;
+padding:20px;
+border-radius:16px;
+width:90%;
+max-width:600px;
+}
+
+/* =========================
+CHAT
+========================= */
+.chat-style{
+display:flex;
+height:400px;
+}
+
+.chat-sidebar{
+width:30%;
+border-right:1px solid #eee;
+overflow-y:auto;
+}
+
+.chat-main{
+width:70%;
+display:flex;
+flex-direction:column;
+}
+
+.chat-messages{
+flex:1;
+padding:10px;
+overflow-y:auto;
+}
+
+.msg{
+padding:8px;
+border-radius:10px;
+margin:5px 0;
+max-width:70%;
+}
+
+.user{
+background:#16a34a;
+color:white;
+margin-left:auto;
+}
+
+.business{
+background:#eee;
+}
+
+/* =========================
+DASHBOARD
+========================= */
+.dashboard{
+background:white;
+padding:15px;
+border-radius:16px;
+margin-bottom:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+.stat{
+display:inline-block;
+margin-right:20px;
+}
+
+/* =========================
+FILTERS
+========================= */
+.filters{
+display:flex;
+gap:10px;
+margin-bottom:10px;
+}
+
+/* =========================
+REVIEWS
+========================= */
+.review{
+background:#f9fafb;
+padding:10px;
+border-radius:10px;
+margin-top:5px;
+}
+
+/* =========================
+MOBILE
+========================= */
 @media(max-width:768px){
-.layout { flex-direction:column; }
-#jobList,#mapContainer { width:100%; }
+.layout{flex-direction:column;}
+#jobList,#mapContainer{width:100%;}
 }
+
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <div class="navbar">
-<b>JobSeed Pro</b>
+<b>JobSeed Ultimate</b>
 
 <div>
-<button class="btn" onclick="signup()">
-<i data-lucide="user-plus"></i> Sign Up
-</button>
-
-<button class="btn" onclick="login()">
-<i data-lucide="log-in"></i> Login
-</button>
-
-<button class="btn" onclick="toggleApps()">
-<i data-lucide="file-text"></i> Apps
-</button>
-
-<button class="btn" onclick="toggleChat()">
-<i data-lucide="message-circle"></i> Chat
-</button>
+<button class="btn" onclick="openAuth()">Login</button>
+<button class="btn" onclick="toggleApps()">Applications</button>
+<button class="btn" onclick="toggleChat()">Chat</button>
 </div>
 </div>
 
+<!-- HERO -->
 <div class="hero">
 <h1>Find Jobs <span>Nearby</span></h1>
-<p>Real system • Not just UI</p>
+<p>Full system • Not just UI</p>
 </div>
 
 <div class="container">
 
-<input placeholder="Search jobs..." onkeyup="searchJobs(this.value)">
-<button class="btn" onclick="findNearbyJobs()">
-<i data-lucide="map-pin"></i> Nearby
-</button>
+<!-- DASHBOARD -->
+<div class="dashboard">
+<div class="stat">Jobs Applied: <span id="statApps">0</span></div>
+<div class="stat">Accepted: <span id="statAccepted">0</span></div>
+<div class="stat">Rejected: <span id="statRejected">0</span></div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters">
+<input placeholder="Search" onkeyup="searchJobs(this.value)">
+<select onchange="filterRating(this.value)">
+<option value="">Rating</option>
+<option value="4">4+</option>
+<option value="4.5">4.5+</option>
+</select>
+</div>
+
+<button class="btn" onclick="findNearbyJobs()">Nearby</button>
 
 <div class="layout">
 <div id="jobList"></div>
@@ -159,10 +267,19 @@ body {
 
 </div>
 
+<!-- AUTH -->
+<div id="authPopup" class="popup">
+<div class="popup-box">
+<h3>Login</h3>
+<input id="authName" placeholder="Username">
+<button class="btn" onclick="login()">Enter</button>
+</div>
+</div>
+
 <!-- APPLICATIONS -->
 <div id="appsPopup" class="popup">
 <div class="popup-box">
-<h3>Your Applications</h3>
+<h3>Applications</h3>
 <div id="appList"></div>
 <button class="btn" onclick="toggleApps()">Close</button>
 </div>
@@ -172,11 +289,9 @@ body {
 <div id="applyPopup" class="popup">
 <div class="popup-box">
 <h3>Apply</h3>
-<input placeholder="Your Name">
-<input placeholder="Why hire you?">
-<input placeholder="Hours">
+<input id="nameInput" placeholder="Name">
+<input id="reasonInput" placeholder="Why hire you">
 <button class="btn" onclick="submitApplication()">Submit</button>
-<button class="btn" onclick="closeApply()">Cancel</button>
 </div>
 </div>
 
@@ -187,50 +302,42 @@ body {
 
 <div class="chat-main">
 <div id="chatMessages" class="chat-messages"></div>
-<div>
 <input id="msgInput">
 <button class="btn" onclick="sendMsg()">Send</button>
 </div>
-</div>
 
-<button class="btn" onclick="toggleChat()">Close</button>
 </div>
 </div>
 
 <script>
 
-// DATABASE
+/* DATABASE */
 let db = JSON.parse(localStorage.getItem("db")) || {
-users:[],currentUser:null,applications:[],chats:{}};
+user:null,
+applications:[],
+reviews:[],
+chats:{}
+};
 
 function saveDB(){
 localStorage.setItem("db",JSON.stringify(db));
 }
 
-// AUTH
-function signup(){
-let name=prompt("Username");
-if(!name)return;
-db.users.push({name});
-db.currentUser=name;
-saveDB();
-alert("Signed up");
+/* AUTH */
+function openAuth(){
+authPopup.style.display="flex";
 }
 
 function login(){
-let name=prompt("Username");
-if(db.users.find(u=>u.name===name)){
-db.currentUser=name;
+db.user=authName.value;
 saveDB();
-alert("Logged in");
-}
+authPopup.style.display="none";
 }
 
-// JOBS
-const jobs=Array.from({length:10},(_,i)=>({
+/* JOBS */
+const jobs = Array.from({length:10},(_,i)=>({
 title:["Barista","Retail","Hotel","Waiter","Cleaner","Delivery","Dog Walker","Spa","Cashier","Kitchen"][i],
 company:"Company "+(i+1),
-pay:"฿"+(400+i*50),
 rating:4+Math.random(),
 reviews:Math.floor(Math.random()*50),
 lat:12.9+Math.random()/10,
@@ -239,134 +346,148 @@ img:"https://picsum.photos/300?"+i
 }));
 
 let selectedJob=null;
-let currentChat=null;
 
-// RENDER
+/* RENDER */
 function renderJobs(list){
 jobList.innerHTML=list.map(j=>`
 <div class="card">
 <img src="${j.img}">
 <b>${j.title}</b><br>
 ${j.company}<br>
-${j.pay}<br>
 ⭐ ${"★".repeat(Math.round(j.rating))}<br>
+
 <button class="btn" onclick='applyJob(${JSON.stringify(j)})'>
 <i data-lucide="send"></i> Apply
 </button>
+
+<button class="btn" onclick='addReview("${j.company}")'>
+<i data-lucide="star"></i> Review
+</button>
+
 </div>`).join("");
+
 lucide.createIcons();
 }
 
-// APPLY
+/* APPLY */
 function applyJob(job){
 selectedJob=job;
 applyPopup.style.display="flex";
 }
 
-function closeApply(){
-applyPopup.style.display="none";
-}
-
 function submitApplication(){
-if(!selectedJob||!db.currentUser){
-alert("Login first");
-return;
-}
+if(!db.user){ alert("Login first"); return; }
 
 db.applications.push({
-user:db.currentUser,
+user:db.user,
 job:selectedJob,
 status:"pending"
 });
 
 saveDB();
-closeApply();
-renderApps();
-simulateDecision(selectedJob.company);
+updateStats();
+applyPopup.style.display="none";
+
+simulateDecision();
 }
 
-// AI
-function simulateDecision(company){
+/* AI DECISION */
+function simulateDecision(){
 setTimeout(()=>{
 db.applications.forEach(a=>{
-if(a.job.company===company && a.status==="pending"){
+if(a.status==="pending"){
 a.status=Math.random()>0.5?"accepted":"rejected";
 }
 });
 saveDB();
+updateStats();
 renderApps();
-},3000);
+},2000);
 }
 
-// APPS
+/* STATS */
+function updateStats(){
+statApps.innerText=db.applications.length;
+statAccepted.innerText=db.applications.filter(a=>a.status==="accepted").length;
+statRejected.innerText=db.applications.filter(a=>a.status==="rejected").length;
+}
+
+/* APPS */
 function renderApps(){
-let list=db.applications.filter(a=>a.user===db.currentUser);
-appList.innerHTML=list.map(a=>`
-<div>
-${a.job.title} - ${a.status}
-</div>`).join("");
+appList.innerHTML=db.applications.map(a=>`
+<div>${a.job.title} - ${a.status}</div>
+`).join("");
 }
 
-// CHAT
+function toggleApps(){
+appsPopup.style.display=appsPopup.style.display==="flex"?"none":"flex";
+renderApps();
+}
+
+/* CHAT */
+function toggleChat(){
+chatPopup.style.display=chatPopup.style.display==="flex"?"none":"flex";
+renderUsers();
+}
+
 function renderUsers(){
 chatUsers.innerHTML=db.applications.map(a=>`
 <div onclick="openChat('${a.job.company}')">${a.job.company}</div>
 `).join("");
 }
 
+let currentChat=null;
+
 function openChat(name){
 currentChat=name;
-let key=db.currentUser+"_"+name;
-chatMessages.innerHTML=(db.chats[key]||[]).map(m=>`
+chatMessages.innerHTML=(db.chats[name]||[]).map(m=>`
 <div class="msg ${m.type}">${m.text}</div>
 `).join("");
 }
 
 function sendMsg(){
 let text=msgInput.value;
-if(!text||!currentChat||!db.currentUser)return;
+if(!text)return;
 
-let key=db.currentUser+"_"+currentChat;
-if(!db.chats[key])db.chats[key]=[];
+if(!db.chats[currentChat]) db.chats[currentChat]=[];
 
-db.chats[key].push({text,type:"user"});
-db.chats[key].push({text:"Reply soon",type:"business"});
+db.chats[currentChat].push({text,type:"user"});
+db.chats[currentChat].push({text:"Reply soon",type:"business"});
 
 saveDB();
-msgInput.value="";
 openChat(currentChat);
+msgInput.value="";
 }
 
-// UI
-function toggleApps(){
-appsPopup.style.display=appsPopup.style.display==="flex"?"none":"flex";
-renderApps();
+/* REVIEWS */
+function addReview(company){
+let text=prompt("Write review");
+if(!text)return;
+
+db.reviews.push({company,text});
+saveDB();
 }
 
-function toggleChat(){
-chatPopup.style.display=chatPopup.style.display==="flex"?"none":"flex";
-renderUsers();
+/* FILTERS */
+function filterRating(val){
+renderJobs(jobs.filter(j=>j.rating>=val));
 }
 
-// SEARCH
+/* SEARCH */
 function searchJobs(q){
 renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
 }
 
-// LOCATION
+/* MAP */
 function findNearbyJobs(){
 navigator.geolocation.getCurrentPosition(pos=>{
-showMap(pos.coords.latitude,pos.coords.longitude);
+mapContainer.innerHTML=`<iframe width="100%" height="400" src="https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}&output=embed"></iframe>`;
 });
 }
 
-function showMap(lat,lng){
-mapContainer.innerHTML=`<iframe width="100%" height="400" src="https://www.google.com/maps?q=${lat},${lng}&output=embed"></iframe>`;
-}
-
-// INIT
+/* INIT */
 renderJobs(jobs);
-showMap(12.93,100.88);
+updateStats();
 
 </script>
 

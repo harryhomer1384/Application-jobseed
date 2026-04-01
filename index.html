@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JobSeed Pro</title>
+<title>JobSeed Ultimate</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -31,12 +31,8 @@ body {
     text-align:center;
     padding:60px 20px;
 }
-.hero h1 {
-    font-size:40px;
-}
-.hero span {
-    color:#16a34a;
-}
+.hero h1 { font-size:40px; }
+.hero span { color:#16a34a; }
 
 /* LAYOUT */
 .container { max-width:1200px; margin:auto; padding:20px; }
@@ -55,9 +51,7 @@ body {
     box-shadow:0 10px 25px rgba(0,0,0,0.08);
     transition:0.3s;
 }
-.card:hover {
-    transform:translateY(-6px) scale(1.02);
-}
+.card:hover { transform:translateY(-6px) scale(1.02); }
 .card img {
     width:100%;
     height:140px;
@@ -73,7 +67,6 @@ button {
     background:linear-gradient(135deg,#16a34a,#22c55e);
     color:white;
     cursor:pointer;
-    transition:0.2s;
 }
 button:hover { transform:scale(1.05); }
 
@@ -104,18 +97,6 @@ button:hover { transform:scale(1.05); }
 .user { background:#16a34a; color:white; margin-left:auto; }
 .business { background:#eee; }
 
-/* MOBILE NAV */
-.bottom-nav {
-    position:fixed;
-    bottom:0;
-    width:100%;
-    display:flex;
-    justify-content:space-around;
-    background:white;
-    padding:10px;
-    box-shadow:0 -5px 15px rgba(0,0,0,0.1);
-}
-
 /* FLOAT CHAT */
 .chat-btn {
     position:fixed;
@@ -125,13 +106,25 @@ button:hover { transform:scale(1.05); }
     color:white;
     padding:14px;
     border-radius:50%;
-    cursor:pointer;
-    box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
-@media(max-width:768px){
-    .layout { flex-direction:column; }
-    #jobList,#mapContainer { width:100%; }
+/* BOTTOM NAV */
+.bottom-nav {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    background:white;
+    padding:10px;
+}
+
+/* APPLICATION CARD */
+.app-card {
+    background:#f9fafb;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
 }
 </style>
 </head>
@@ -139,8 +132,10 @@ button:hover { transform:scale(1.05); }
 <body>
 
 <div class="navbar">
-<b>🌱 JobSeed Pro</b>
+<b>🌱 JobSeed Ultimate</b>
 <div>
+<button onclick="signup()">Sign Up</button>
+<button onclick="login()">Login</button>
 <button onclick="toggleApps()">📄</button>
 <button onclick="toggleChat()">💬</button>
 </div>
@@ -148,7 +143,7 @@ button:hover { transform:scale(1.05); }
 
 <div class="hero">
 <h1>Find Jobs <span>Nearby</span></h1>
-<p>Real jobs. Real chat. Real applications.</p>
+<p>Real jobs • Real chat • Real backend simulation</p>
 </div>
 
 <div class="container">
@@ -166,7 +161,7 @@ button:hover { transform:scale(1.05); }
 <!-- APPLICATION POPUP -->
 <div id="appsPopup" class="popup">
 <div class="popup-box">
-<h3>Applications</h3>
+<h3>Your Applications</h3>
 <div id="appList"></div>
 <button onclick="toggleApps()">Close</button>
 </div>
@@ -209,14 +204,53 @@ button:hover { transform:scale(1.05); }
 
 <script>
 
-// JOBS
-const jobs=[{title:"Barista",company:"Cafe Amazon",pay:"฿500",rating:4.5,reviews:32,lat:12.93,lng:100.88,img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb"}];
+// ===== FAKE DATABASE =====
+let db = JSON.parse(localStorage.getItem("db")) || {
+    users: [],
+    currentUser: null,
+    applications: [],
+    chats: {}
+};
 
-let applications=JSON.parse(localStorage.getItem("apps"))||[];
-let chats=JSON.parse(localStorage.getItem("chats"))||{};
-let currentChat=null;
+function saveDB(){
+    localStorage.setItem("db", JSON.stringify(db));
+}
+
+// ===== AUTH =====
+function signup(){
+    const name = prompt("Username");
+    if(!name) return;
+    db.users.push({name});
+    db.currentUser = name;
+    saveDB();
+    alert("Signed up!");
+}
+
+function login(){
+    const name = prompt("Username");
+    if(db.users.find(u=>u.name===name)){
+        db.currentUser = name;
+        saveDB();
+        alert("Logged in!");
+    } else alert("User not found");
+}
+
+// ===== JOBS =====
+const jobs = Array.from({length:10},(_,i)=>({
+title:["Barista","Retail","Hotel Staff","Waiter","Cleaner","Delivery","Dog Walker","Spa","Cashier","Kitchen"][i],
+company:"Company "+(i+1),
+pay:"฿"+(400+i*50),
+rating:4+Math.random(),
+reviews:Math.floor(Math.random()*50),
+lat:12.9+Math.random()/10,
+lng:100.8+Math.random()/10,
+img:"https://picsum.photos/300?"+i
+}));
+
 let selectedJob=null;
+let currentChat=null;
 
+// ===== RENDER JOBS =====
 function renderJobs(list){
 jobList.innerHTML=list.map(j=>`
 <div class="card" onclick="showOnMap(${j.lat},${j.lng})">
@@ -229,14 +263,17 @@ ${j.pay}<br>
 </div>`).join("");
 }
 
+// ===== MAP =====
 function showOnMap(lat,lng){
 mapContainer.innerHTML=`<iframe width="100%" height="400" src="https://www.google.com/maps?q=${lat},${lng}&output=embed"></iframe>`;
 }
 
+// ===== SEARCH =====
 function searchJobs(q){
 renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
 }
 
+// ===== APPLY =====
 function applyJob(job){
 selectedJob=job;
 applyPopup.style.display="flex";
@@ -245,46 +282,85 @@ applyPopup.style.display="flex";
 function closeApply(){ applyPopup.style.display="none"; }
 
 function submitApplication(){
-applications.push({...selectedJob,status:"pending"});
-localStorage.setItem("apps",JSON.stringify(applications));
+if(!selectedJob || !db.currentUser){ alert("Login first"); return; }
+
+db.applications.push({
+user: db.currentUser,
+job: selectedJob,
+status:"pending"
+});
+
+saveDB();
 closeApply();
 renderApps();
-renderUsers();
-alert("Application sent 🚀");
+simulateDecision(selectedJob.company);
 }
 
+// ===== AI DECISION =====
+function simulateDecision(company){
+setTimeout(()=>{
+db.applications.forEach(a=>{
+if(a.job.company===company && a.status==="pending"){
+a.status=Math.random()>0.5?"accepted":"rejected";
+}
+});
+saveDB();
+renderApps();
+},3000);
+}
+
+// ===== APPS =====
 function renderApps(){
-appList.innerHTML=applications.map(a=>`
-<div>
-${a.title} - ${a.company} (${a.status})
+const myApps=db.applications.filter(a=>a.user===db.currentUser);
+appList.innerHTML=myApps.map(a=>`
+<div class="app-card">
+<b>${a.job.title}</b><br>
+${a.job.company}<br>
+Status: ${a.status}
 </div>`).join("");
 }
 
+// ===== CHAT =====
 function renderUsers(){
-chatUsers.innerHTML=applications.map(a=>`
-<div onclick="openChat('${a.company}')">${a.company}</div>`).join("");
+chatUsers.innerHTML=db.applications.map(a=>`
+<div onclick="openChat('${a.job.company}')">${a.job.company}</div>
+`).join("");
 }
 
 function openChat(name){
 currentChat=name;
-chatMessages.innerHTML=(chats[name]||[]).map(m=>`
-<div class="msg ${m.type}">${m.text}</div>`).join("");
+const key=db.currentUser+"_"+name;
+chatMessages.innerHTML=(db.chats[key]||[]).map(m=>`
+<div class="msg ${m.type}">${m.text}</div>
+`).join("");
 }
 
 function sendMsg(){
 let text=msgInput.value;
-if(!text||!currentChat)return;
-if(!chats[currentChat])chats[currentChat]=[];
-chats[currentChat].push({text,type:"user"});
-chats[currentChat].push({text:"We'll reply soon!",type:"business"});
-localStorage.setItem("chats",JSON.stringify(chats));
+if(!text||!currentChat||!db.currentUser)return;
+
+const key=db.currentUser+"_"+currentChat;
+if(!db.chats[key]) db.chats[key]=[];
+
+db.chats[key].push({text,type:"user"});
+db.chats[key].push({text:"We’ll reply soon!",type:"business"});
+
+saveDB();
 msgInput.value="";
 openChat(currentChat);
 }
 
-function toggleApps(){ appsPopup.style.display = appsPopup.style.display==="flex"?"none":"flex"; renderApps(); }
-function toggleChat(){ chatPopup.style.display = chatPopup.style.display==="flex"?"none":"flex"; renderUsers(); }
+// ===== POPUPS =====
+function toggleApps(){
+appsPopup.style.display=appsPopup.style.display==="flex"?"none":"flex";
+renderApps();
+}
+function toggleChat(){
+chatPopup.style.display=chatPopup.style.display==="flex"?"none":"flex";
+renderUsers();
+}
 
+// ===== LOCATION =====
 function findNearbyJobs(){
 navigator.geolocation.getCurrentPosition(pos=>{
 renderJobs(jobs);
@@ -292,6 +368,7 @@ showOnMap(pos.coords.latitude,pos.coords.longitude);
 });
 }
 
+// INIT
 renderJobs(jobs);
 showOnMap(12.93,100.88);
 

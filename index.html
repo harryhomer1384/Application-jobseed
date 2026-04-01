@@ -46,9 +46,15 @@ body { font-family: 'Inter', sans-serif; margin:0; background:#f0fdf4; }
 .accepted { color:green; }
 .rejected { color:red; }
 
-/* SEARCH */
 .search input {
     width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;
+}
+
+/* MAP */
+#map {
+    height:300px;
+    border-radius:12px;
+    margin-bottom:20px;
 }
 
 /* CHAT */
@@ -70,7 +76,6 @@ body { font-family: 'Inter', sans-serif; margin:0; background:#f0fdf4; }
 .chat-input input { flex:1; padding:10px; border:none; }
 .chat-input button { background:#16a34a; color:white; border:none; padding:10px; }
 
-/* MODAL */
 .modal {
     display:none; position:fixed; top:0; left:0;
     width:100%; height:100%;
@@ -104,9 +109,17 @@ body { font-family: 'Inter', sans-serif; margin:0; background:#f0fdf4; }
 
 <div id="jobs" class="container">
     <h1>Jobs</h1>
+
     <div class="search">
         <input placeholder="Search jobs..." onkeyup="searchJobs(this.value)">
     </div>
+
+    <button onclick="findNearbyJobs()" style="margin-top:10px;padding:10px;border:none;border-radius:10px;background:#16a34a;color:white;">
+        📍 Show Nearby Jobs
+    </button>
+
+    <div id="map"></div>
+
     <div id="jobList" class="jobs"></div>
 </div>
 
@@ -132,36 +145,81 @@ body { font-family: 'Inter', sans-serif; margin:0; background:#f0fdf4; }
     </div>
 </div>
 
-<!-- MODAL -->
-<div id="applyModal" class="modal">
-    <div class="modal-content">
-        <h2 id="jobTitleModal">Apply</h2>
-
-        <input id="appName" placeholder="Your Name">
-        <input id="appAge" placeholder="Your Age">
-
-        <div id="extraQuestions"></div>
-
-        <input type="file" id="resumeUpload">
-        <input id="appTime" placeholder="Availability">
-
-        <button onclick="submitApplication()">Submit</button>
-        <button onclick="closeModal()" class="cancel">Cancel</button>
-    </div>
-</div>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 
 <script>
 const jobs=[
-{title:"Barista Assistant",company:"Bean There Café",pay:"฿500/day",img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800"},
-{title:"Retail Helper",company:"SportZone",pay:"฿550/day",img:"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800"},
-{title:"Dog Walker",company:"Happy Paws",pay:"฿400/day",img:"https://images.unsplash.com/photo-1558944351-c3c14e1d5c1f?auto=format&fit=crop&w=800"}
+{title:"Barista Assistant",company:"Bean Café",pay:"฿500/day",lat:12.68,lng:101.28,img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800"},
+{title:"Retail Helper",company:"SportZone",pay:"฿550/day",lat:12.69,lng:101.27,img:"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800"},
+{title:"Dog Walker",company:"Happy Paws",pay:"฿400/day",lat:12.67,lng:101.29,img:"https://images.unsplash.com/photo-1558944351-c3c14e1d5c1f?auto=format&fit=crop&w=800"},
+{title:"Cashier",company:"7-Eleven",pay:"฿520/day",lat:12.66,lng:101.30,img:"https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=800"},
+{title:"Waiter",company:"Beach Restaurant",pay:"฿600/day",lat:12.70,lng:101.26,img:"https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800"}
 ];
 
-let saved=JSON.parse(localStorage.getItem("saved"))||[];
-let applications=JSON.parse(localStorage.getItem("apps"))||[];
-let chats=JSON.parse(localStorage.getItem("chats"))||{};
-let currentChat=null;
-let selectedJob=null;
+let map;
+
+function initMap(){
+    const center={lat:12.68,lng:101.28};
+    map=new google.maps.Map(document.getElementById("map"),{
+        zoom:13,
+        center:center
+    });
+
+    renderMapMarkers(jobs);
+}
+
+function renderMapMarkers(list){
+    list.forEach(job=>{
+        const marker=new google.maps.Marker({
+            position:{lat:job.lat,lng:job.lng},
+            map:map,
+            title:job.title
+        });
+
+        const info=new google.maps.InfoWindow({
+            content:`<b>${job.title}</b><br>${job.company}<br>${job.pay}`
+        });
+
+        marker.addListener("click",()=>info.open(map,marker));
+    });
+}
+
+function getDistance(lat1, lon1, lat2, lon2){
+    const R=6371;
+    const dLat=(lat2-lat1)*Math.PI/180;
+    const dLon=(lon2-lon1)*Math.PI/180;
+
+    const a=Math.sin(dLat/2)*Math.sin(dLat/2)+
+        Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+        Math.sin(dLon/2)*Math.sin(dLon/2);
+
+    const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    return R*c;
+}
+
+function findNearbyJobs(){
+    navigator.geolocation.getCurrentPosition(pos=>{
+        const userLat=pos.coords.latitude;
+        const userLng=pos.coords.longitude;
+
+        map.setCenter({lat:userLat,lng:userLng});
+
+        new google.maps.Marker({
+            position:{lat:userLat,lng:userLng},
+            map:map,
+            icon:"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        });
+
+        let list=jobs.map(j=>{
+            const distance=getDistance(userLat,userLng,j.lat,j.lng);
+            return {...j,distance};
+        });
+
+        list.sort((a,b)=>a.distance-b.distance);
+
+        renderJobs(list);
+    });
+}
 
 function renderJobs(list=jobs){
 let html="";
@@ -169,129 +227,22 @@ list.forEach(j=>{
 html+=`
 <div class="card">
 <img src="${j.img}">
-<b>${j.title}</b><br>${j.company}<br>${j.pay}<br>
-<button class="btn apply" onclick='applyJob(${JSON.stringify(j)})'>Apply</button>
-<button class="btn save ${saved.includes(j.title)?"saved":""}" onclick='saveJob("${j.title}")'>❤️</button>
+<b>${j.title}</b><br>
+${j.company}<br>
+${j.pay}<br>
+${j.distance ? "📍 "+j.distance.toFixed(1)+" km away" : ""}
+<button class="btn apply">Apply</button>
 </div>`;
 });
-document.getElementById("jobList").innerHTML=html;
-}
-
-function saveJob(t){
-saved.includes(t)?saved=saved.filter(x=>x!==t):saved.push(t);
-localStorage.setItem("saved",JSON.stringify(saved));
-renderJobs();
+jobList.innerHTML=html;
 }
 
 function searchJobs(q){
 renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
 }
 
-function applyJob(job){
-selectedJob=job;
-document.getElementById("applyModal").style.display="flex";
-document.getElementById("jobTitleModal").innerText="Apply: "+job.title;
-
-let q="";
-if(job.title.includes("Barista")){
-q=`<input id="q1" placeholder="Coffee experience?"><input id="q2" placeholder="Favorite drink?">`;
-}
-else if(job.title.includes("Retail")){
-q=`<input id="q1" placeholder="Customer service experience?"><input id="q2" placeholder="Cashier skills?">`;
-}
-else if(job.title.includes("Dog")){
-q=`<input id="q1" placeholder="Pet experience?"><input id="q2" placeholder="Large dogs ok?">`;
-}
-else{
-q=`<input id="q1" placeholder="Why do you want this job?">`;
-}
-document.getElementById("extraQuestions").innerHTML=q;
-}
-
-function closeModal(){
-document.getElementById("applyModal").style.display="none";
-}
-
-function submitApplication(){
-let name=appName.value;
-let age=appAge.value;
-let time=appTime.value;
-
-if(!name||!age||!time)return alert("Fill required");
-
-let file=document.getElementById("resumeUpload").files[0];
-let resume=file?file.name:"None";
-
-applications.push({
-...selectedJob,
-applicant:name,
-resume,
-status:"pending"
-});
-
-localStorage.setItem("apps",JSON.stringify(applications));
-
-closeModal();
-renderApps();
-renderUsers();
-}
-
-function renderApps(){
-let html="";
-applications.forEach((a,i)=>{
-html+=`
-<div class="app-card">
-<b>${a.title}</b><br>${a.company}<br>
-👤 ${a.applicant}<br>📎 ${a.resume}
-<div class="status ${a.status}">${a.status}</div>
-<button onclick="updateStatus(${i},'accepted')" class="btn apply">Accept</button>
-<button onclick="updateStatus(${i},'rejected')" class="btn cancel">Reject</button>
-</div>`;
-});
-appList.innerHTML=html;
-}
-
-function updateStatus(i,s){
-applications[i].status=s;
-localStorage.setItem("apps",JSON.stringify(applications));
-renderApps();
-}
-
-function renderUsers(){
-let html="";
-applications.forEach(a=>{
-html+=`<div class="chat-user" onclick="openChat('${a.company}')">${a.company}</div>`;
-});
-chatUsers.innerHTML=html;
-}
-
-function openChat(name){
-currentChat=name;
-chatTitle.innerText=name;
-let msgs=chats[name]||[];
-let html="";
-msgs.forEach(m=>html+=`<div class="msg ${m.type}">${m.text}</div>`);
-chatMessages.innerHTML=html;
-}
-
-function sendMsg(){
-let text=msgInput.value.trim();
-if(!text||!currentChat)return;
-
-if(!chats[currentChat])chats[currentChat]=[];
-
-chats[currentChat].push({text,type:"user"});
-chats[currentChat].push({text:"We'll reply soon!",type:"business"});
-
-localStorage.setItem("chats",JSON.stringify(chats));
-
-msgInput.value="";
-openChat(currentChat);
-}
-
+initMap();
 renderJobs();
-renderApps();
-renderUsers();
 </script>
 
 </body>

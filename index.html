@@ -3,110 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>JobSeed Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 
-/* ========================= GLOBAL ========================= */
+/* ================= DESIGN SYSTEM ================= */
+:root{
+--primary:#16a34a;
+--bg:#f0fdf4;
+--card:#ffffff;
+--text:#052e16;
+--shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* ================= GLOBAL ================= */
 body{
 margin:0;
 font-family:'Inter',sans-serif;
-background:linear-gradient(135deg,#f0fdf4,#dcfce7,#ecfdf5);
+background:linear-gradient(135deg,#f0fdf4,#dcfce7,#bbf7d0);
+color:var(--text);
 }
 
+h1,h2,h3{
+font-family:'Space Grotesk',sans-serif;
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:18px 30px;
+background:rgba(255,255,255,0.8);
+backdrop-filter:blur(10px);
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.logo{
+font-weight:700;
+font-size:20px;
+color:var(--primary);
+}
+
+.btn{
+background:var(--primary);
+color:white;
+padding:10px 16px;
+border-radius:10px;
+border:none;
+cursor:pointer;
+font-weight:600;
+}
+
+/* ================= LAYOUT ================= */
 .container{
 max-width:1200px;
 margin:auto;
 padding:20px;
 }
 
-/* ========================= NAVBAR ========================= */
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 25px;
-background:white;
-box-shadow:0 5px 20px rgba(0,0,0,0.05);
-position:sticky;
-top:0;
-z-index:1000;
-}
-
-.btn{
-padding:10px 14px;
-border:none;
-border-radius:10px;
-background:#16a34a;
-color:white;
-cursor:pointer;
-font-weight:600;
-margin-right:5px;
-}
-
-.btn.secondary{
-background:#e5e7eb;
-color:#111;
-}
-
-/* ========================= LAYOUT ========================= */
 .layout{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:20px;
 }
 
-/* ========================= CARD ========================= */
+/* ================= JOB GRID ================= */
+.job-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+
+/* ================= CARD ================= */
 .card{
-background:white;
-padding:16px;
+background:var(--card);
 border-radius:16px;
-margin-bottom:14px;
-box-shadow:0 12px 30px rgba(0,0,0,0.08);
+box-shadow:var(--shadow);
+overflow:hidden;
 transition:0.25s;
 }
 
 .card:hover{
-transform:translateY(-5px);
+transform:translateY(-6px);
 }
 
 .card img{
 width:100%;
-height:160px;
+height:140px;
 object-fit:cover;
-border-radius:10px;
 }
 
-/* ========================= STARS ========================= */
-.stars{
-color:#facc15;
+.card-content{
+padding:12px;
 }
 
-/* ========================= MAP ========================= */
+.card-title{
+font-weight:600;
+}
+
+.card-sub{
+font-size:13px;
+color:#555;
+}
+
+.actions{
+margin-top:8px;
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+}
+
+/* ================= MAP ================= */
 .map-box{
 background:white;
 padding:12px;
 border-radius:12px;
 margin-top:10px;
+box-shadow:var(--shadow);
 }
 
-/* ========================= GRID ========================= */
-.apps-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.app-card{
-background:white;
-padding:12px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
-}
-
-/* ========================= CHAT ========================= */
+/* ================= CHAT ================= */
 .popup{
 display:none;
 position:fixed;
@@ -117,13 +138,12 @@ height:100%;
 background:rgba(0,0,0,0.4);
 justify-content:center;
 align-items:center;
-z-index:2000;
 }
 
-.chat-box{
+.chat{
 background:white;
 width:90%;
-max-width:700px;
+max-width:600px;
 border-radius:12px;
 overflow:hidden;
 }
@@ -135,44 +155,20 @@ padding:12px;
 border-bottom:1px solid #eee;
 }
 
+.msg{
+padding:8px;
+border-radius:10px;
+margin:6px;
+max-width:70%;
+}
+
+.user{background:#16a34a;color:white;margin-left:auto;}
+.business{background:#eee;}
+
 .chat-messages{
 height:300px;
 overflow-y:auto;
 padding:10px;
-}
-
-.msg{
-padding:8px;
-border-radius:10px;
-margin:5px 0;
-max-width:70%;
-}
-
-.user{
-background:#16a34a;
-color:white;
-margin-left:auto;
-}
-
-.business{
-background:#eee;
-}
-
-.chat-input{
-display:flex;
-border-top:1px solid #eee;
-}
-
-.chat-input input{
-flex:1;
-padding:10px;
-border:none;
-}
-
-/* ========================= MOBILE ========================= */
-@media(max-width:768px){
-.layout{grid-template-columns:1fr;}
-.apps-grid{grid-template-columns:1fr;}
 }
 
 </style>
@@ -181,137 +177,104 @@ border:none;
 <body>
 
 <div class="navbar">
-<b>JobSeed</b>
+<div class="logo">JobSeed</div>
 <div>
-<button class="btn" onclick="toggleApps()">Applications</button>
 <button class="btn" onclick="toggleChat()">Chat</button>
+<button class="btn" onclick="toggleMap()">Map</button>
 </div>
 </div>
 
 <div class="container">
 
-<input placeholder="Search jobs..." onkeyup="searchJobs(this.value)">
-<button class="btn" onclick="sortJobs('pay')">Highest Pay</button>
+<input placeholder="Search..." onkeyup="searchJobs(this.value)">
+<button class="btn" onclick="sortJobs('pay')">Top Pay</button>
 <button class="btn" onclick="sortJobs('rating')">Top Rated</button>
-<button class="btn secondary" onclick="toggleMapView()">Toggle Map</button>
 
 <div class="layout">
 
-<div id="jobList"></div>
+<div class="job-grid" id="jobList"></div>
 
-<div>
 <div id="mapContainer">Map hidden</div>
-</div>
 
 </div>
 
-</div>
-
-<!-- APPLICATIONS -->
-<div id="appsPopup" class="popup">
-<div class="chat-box">
-<div class="chat-header">
-<b>Applications</b>
-<button onclick="toggleApps()">Close</button>
-</div>
-<div id="appList" style="padding:10px;"></div>
-</div>
 </div>
 
 <!-- CHAT -->
 <div id="chatPopup" class="popup">
-<div class="chat-box">
-
+<div class="chat">
 <div class="chat-header">
-<b>Messages</b>
+<b>Chat</b>
 <button onclick="toggleChat()">Close</button>
 </div>
-
 <div id="chatMessages" class="chat-messages"></div>
-
-<div class="chat-input">
 <input id="msgInput">
-<button class="btn" onclick="sendMsg()">Send</button>
-</div>
-
+<button onclick="sendMsg()">Send</button>
 </div>
 </div>
 
 <script>
 
-/* ========================= DATA ========================= */
-const jobs = [
-{title:"Barista",company:"Cafe Amazon",lat:12.682,lng:101.281,pay:500,rating:4.5,img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb"},
-{title:"Retail",company:"Central Mall",lat:12.680,lng:101.279,pay:550,rating:4.2,img:"https://images.unsplash.com/photo-1512436991641"},
-{title:"Hotel Staff",company:"Hilton",lat:12.678,lng:101.282,pay:700,rating:4.8,img:"https://images.unsplash.com/photo-1566073771259"},
-{title:"Waiter",company:"Beach Restaurant",lat:12.676,lng:101.285,pay:600,rating:4.3,img:"https://images.unsplash.com/photo-1559339352"}
-];
+/* ================= DATA ================= */
+const jobs = Array.from({length:10},(_,i)=>({
+title:["Barista","Retail","Hotel","Waiter","Cleaner","Delivery","Spa","Cashier","Kitchen","Assistant"][i],
+company:["Cafe Amazon","Central Mall","Hilton","Beach Restaurant","CleanCo","Grab","Spa Relax","7-Eleven","Seafood","Office"][i],
+pay:400+i*50,
+rating:4+Math.random(),
+lat:12.68+(Math.random()-0.5)/50,
+lng:101.28+(Math.random()-0.5)/50,
+img:`https://source.unsplash.com/400x300/?business,job,${i}`
+}));
 
-let applications=[];
-let savedJobs=[];
-let chats={};
-let currentChat="General";
-
-let selectedLocation=null;
+let selected=null;
 let mapVisible=false;
+let chats=[];
 
-/* ========================= FUNCTIONS ========================= */
-
-function stars(r){
-return "★".repeat(Math.floor(r))+"☆".repeat(5-Math.floor(r));
-}
-
+/* ================= RENDER ================= */
 function renderJobs(list){
 jobList.innerHTML=list.map(j=>`
 <div class="card">
 <img src="${j.img}">
-<b>${j.title}</b><br>
-${j.company}<br>
-฿${j.pay}<br>
-<div class="stars">${stars(j.rating)}</div>
+<div class="card-content">
+<div class="card-title">${j.title}</div>
+<div class="card-sub">${j.company}</div>
+<div>฿${j.pay}</div>
 
-<button class="btn" onclick='applyJob(${JSON.stringify(j)})'>Apply</button>
-<button class="btn" onclick="selectLocation(${j.lat},${j.lng},'${j.company}','${j.title}')">Location</button>
-<button class="btn secondary" onclick='saveJob(${JSON.stringify(j)})'>Save</button>
+<div class="actions">
+<button class="btn" onclick='selectJob(${JSON.stringify(j)})'>Map</button>
+<button class="btn">Apply</button>
+</div>
 
+</div>
 </div>
 `).join("");
 }
 
-function applyJob(job){
-applications.push(job);
-renderApps();
-}
-
-function saveJob(job){
-savedJobs.push(job);
-}
-
-/* ========================= MAP ========================= */
-function selectLocation(lat,lng,company,title){
-selectedLocation={lat,lng,company,title};
+/* ================= MAP ================= */
+function selectJob(j){
+selected=j;
 renderMap();
 }
 
-function toggleMapView(){
+function toggleMap(){
 mapVisible=!mapVisible;
 renderMap();
 }
 
 function renderMap(){
-if(!mapVisible || !selectedLocation){
+if(!mapVisible || !selected){
 mapContainer.innerHTML="Map hidden";
 return;
 }
 
 mapContainer.innerHTML=`
 <iframe width="100%" height="300"
-src="https://www.google.com/maps?q=${selectedLocation.lat},${selectedLocation.lng}&output=embed"></iframe>
+src="https://www.google.com/maps?q=${selected.lat},${selected.lng}&output=embed"></iframe>
 
 <div class="map-box">
-<b>${selectedLocation.company}</b><br>
-${selectedLocation.title}<br>
-<button class="btn" onclick="openMaps(${selectedLocation.lat},${selectedLocation.lng})">Open in Maps</button>
+<b>${selected.company}</b><br>
+${selected.title}<br>
+<button class="btn" onclick="openMaps(${selected.lat},${selected.lng})">Open</button>
 </div>
 `;
 }
@@ -320,62 +283,37 @@ function openMaps(lat,lng){
 window.open(`https://www.google.com/maps?q=${lat},${lng}`);
 }
 
-/* ========================= SORT ========================= */
+/* ================= SORT ================= */
 function sortJobs(type){
 let sorted=[...jobs];
-
 if(type==="pay") sorted.sort((a,b)=>b.pay-a.pay);
 if(type==="rating") sorted.sort((a,b)=>b.rating-a.rating);
-
 renderJobs(sorted);
 }
 
-/* ========================= APPS ========================= */
-function renderApps(){
-appList.innerHTML=`
-<div class="apps-grid">
-${applications.map(a=>`
-<div class="app-card">
-<b>${a.title}</b><br>${a.company}
-</div>
-`).join("")}
-</div>
-`;
-}
-
-function toggleApps(){
-appsPopup.style.display=appsPopup.style.display==="flex"?"none":"flex";
-renderApps();
-}
-
-/* ========================= CHAT ========================= */
+/* ================= CHAT ================= */
 function toggleChat(){
 chatPopup.style.display=chatPopup.style.display==="flex"?"none":"flex";
-renderChat();
 }
 
 function sendMsg(){
 let text=msgInput.value;
 if(!text)return;
 
-if(!chats[currentChat]) chats[currentChat]=[];
-
-chats[currentChat].push({text,type:"user"});
-chats[currentChat].push({text:"Reply soon",type:"business"});
+chats.push({text,type:"user"});
+chats.push({text:"We will respond shortly",type:"business"});
 
 msgInput.value="";
 renderChat();
 }
 
 function renderChat(){
-chatMessages.innerHTML=(chats[currentChat]||[]).map(m=>`
+chatMessages.innerHTML=chats.map(m=>`
 <div class="msg ${m.type}">${m.text}</div>
 `).join("");
-
-chatMessages.scrollTop=chatMessages.scrollHeight;
 }
 
-/* ========================= SEARCH ========================= */
+/* ================= SEARCH ================= */
 function searchJobs(q){
 renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
 }

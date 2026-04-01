@@ -1,206 +1,222 @@
-<!-- THIS IS ONLY THE NEW ADDITIONS (DO NOT DELETE YOUR OLD CODE) -->
-<!-- ADD BELOW YOUR EXISTING SCRIPT -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobSeed</title>
 
-<script>
-
-/* =========================
-HIGH QUALITY IMAGE FIX
-========================= */
-jobs.forEach((j,i)=>{
-    j.img = `https://source.unsplash.com/800x500/?work,job,office,${i}`;
-});
-
-/* =========================
-STAR SYSTEM (NO EMOJIS)
-========================= */
-function renderStars(rating){
-    let full = Math.floor(rating);
-    let empty = 5 - full;
-    return `
-    <span class="stars">
-        ${"★".repeat(full)}${"☆".repeat(empty)}
-    </span>`;
-}
-
-/* =========================
-UPDATE JOB RENDER (EXTEND)
-========================= */
-const oldRenderJobs = renderJobs;
-
-renderJobs = function(list){
-    jobList.innerHTML = list.map(j=>`
-    <div class="card">
-        <img src="${j.img}">
-        
-        <b>${j.title}</b><br>
-        ${j.company}<br>
-        
-        ${renderStars(j.rating)} (${j.reviews})<br>
-        
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
-        
-        <button class="btn" onclick='applyJob(${JSON.stringify(j)})'>
-        <i data-lucide="send"></i> Apply
-        </button>
-
-        <button class="btn" onclick='saveJob(${JSON.stringify(j)})'>
-        <i data-lucide="heart"></i>
-        </button>
-
-        <button class="btn" onclick="viewLocation(${j.lat},${j.lng})">
-        <i data-lucide="map-pin"></i>
-        </button>
-
-        </div>
-
-        <div id="reviews-${j.company}"></div>
-
-    </div>
-    `).join("");
-
-    lucide.createIcons();
-};
-
-/* =========================
-LOCATION SYSTEM
-========================= */
-function viewLocation(lat,lng){
-    mapContainer.innerHTML = `
-    <iframe width="100%" height="400"
-    src="https://www.google.com/maps?q=${lat},${lng}&output=embed">
-    </iframe>`;
-}
-
-/* =========================
-SAVE JOB SYSTEM
-========================= */
-let savedJobs = JSON.parse(localStorage.getItem("savedJobs")) || [];
-
-function saveJob(job){
-    savedJobs.push(job);
-    localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
-}
-
-/* =========================
-ADVANCED FILTERS
-========================= */
-function filterAdvanced(){
-    let minRating = document.getElementById("filterRating")?.value || 0;
-    let filtered = jobs.filter(j => j.rating >= minRating);
-    renderJobs(filtered);
-}
-
-/* =========================
-SORT SYSTEM
-========================= */
-function sortBy(type){
-    let sorted = [...jobs];
-
-    if(type==="rating"){
-        sorted.sort((a,b)=>b.rating-a.rating);
-    }
-
-    if(type==="pay"){
-        sorted.sort((a,b)=>parseInt(b.pay?.slice(1)||0)-parseInt(a.pay?.slice(1)||0));
-    }
-
-    renderJobs(sorted);
-}
-
-/* =========================
-REVIEWS SYSTEM (DISPLAY)
-========================= */
-function renderReviews(){
-    db.reviews.forEach(r=>{
-        let el = document.getElementById("reviews-"+r.company);
-        if(el){
-            el.innerHTML += `
-            <div class="review">
-                ${r.text}
-            </div>`;
-        }
-    });
-}
-
-/* =========================
-ENHANCED APPLICATION VALIDATION
-========================= */
-const oldSubmit = submitApplication;
-
-submitApplication = function(){
-
-    let name = document.getElementById("nameInput")?.value;
-    let reason = document.getElementById("reasonInput")?.value;
-
-    if(!name || !reason){
-        alert("Fill all fields");
-        return;
-    }
-
-    oldSubmit();
-};
-
-/* =========================
-CHAT TIMESTAMPS
-========================= */
-const oldSend = sendMsg;
-
-sendMsg = function(){
-    let text = msgInput.value;
-    if(!text) return;
-
-    let time = new Date().toLocaleTimeString();
-
-    if(!db.chats[currentChat]) db.chats[currentChat] = [];
-
-    db.chats[currentChat].push({
-        text: text + " (" + time + ")",
-        type:"user"
-    });
-
-    db.chats[currentChat].push({
-        text:"Reply soon ("+time+")",
-        type:"business"
-    });
-
-    saveDB();
-    openChat(currentChat);
-    msgInput.value="";
-};
-
-/* =========================
-DASHBOARD EXPANSION
-========================= */
-function updateDashboard(){
-    updateStats();
-
-    let totalSaved = savedJobs.length;
-
-    let dash = document.querySelector(".dashboard");
-    dash.innerHTML += `
-    <div class="stat">Saved Jobs: ${totalSaved}</div>
-    `;
-}
-
-/* =========================
-INIT EXTENSIONS
-========================= */
-renderJobs(jobs);
-renderReviews();
-updateDashboard();
-
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
 
-/* STAR STYLE */
+/* =========================
+GLOBAL STYLES
+========================= */
+body{
+margin:0;
+font-family:'Inter',sans-serif;
+background:linear-gradient(135deg,#ecfdf5,#dcfce7);
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+/* =========================
+NAVBAR
+========================= */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 25px;
+background:white;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+/* =========================
+BUTTON SYSTEM
+========================= */
+.btn{
+padding:10px 16px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#16a34a,#22c55e);
+color:white;
+display:inline-flex;
+align-items:center;
+gap:8px;
+cursor:pointer;
+font-weight:600;
+transition:0.25s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+}
+
+/* =========================
+HERO
+========================= */
+.hero{
+text-align:center;
+padding:60px 20px;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.hero span{
+color:#16a34a;
+}
+
+/* =========================
+DASHBOARD
+========================= */
+.dashboard{
+background:white;
+padding:20px;
+border-radius:16px;
+margin-bottom:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.stat{
+font-size:14px;
+}
+
+/* =========================
+FILTERS
+========================= */
+.filters{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+flex-wrap:wrap;
+}
+
+/* =========================
+LAYOUT
+========================= */
+.layout{
+display:flex;
+gap:20px;
+}
+
+#jobList{width:50%;}
+#mapContainer{width:50%;}
+
+/* =========================
+CARD SYSTEM
+========================= */
+.card{
+background:white;
+border-radius:18px;
+padding:14px;
+margin-bottom:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.card img{
+width:100%;
+height:160px;
+object-fit:cover;
+border-radius:10px;
+}
+
+/* =========================
+STAR SYSTEM
+========================= */
 .stars{
 color:#facc15;
-font-size:14px;
 letter-spacing:2px;
 }
 
-/* REVIEW STYLE */
+/* =========================
+POPUP SYSTEM
+========================= */
+.popup{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
+
+.popup-box{
+background:white;
+padding:20px;
+border-radius:16px;
+width:90%;
+max-width:600px;
+}
+
+/* =========================
+CHAT SYSTEM
+========================= */
+.chat-style{
+display:flex;
+height:400px;
+}
+
+.chat-sidebar{
+width:30%;
+border-right:1px solid #eee;
+overflow-y:auto;
+}
+
+.chat-main{
+width:70%;
+display:flex;
+flex-direction:column;
+}
+
+.chat-messages{
+flex:1;
+padding:10px;
+overflow-y:auto;
+}
+
+.msg{
+padding:8px;
+border-radius:10px;
+margin:5px 0;
+max-width:70%;
+}
+
+.user{
+background:#16a34a;
+color:white;
+margin-left:auto;
+}
+
+.business{
+background:#eee;
+}
+
+/* =========================
+REVIEW SYSTEM
+========================= */
 .review{
 background:#f1f5f9;
 padding:8px;
@@ -209,11 +225,377 @@ margin-top:5px;
 font-size:13px;
 }
 
-/* FILTER BAR */
-.filter-bar{
-display:flex;
-gap:10px;
-margin-bottom:10px;
+/* =========================
+MOBILE
+========================= */
+@media(max-width:768px){
+.layout{flex-direction:column;}
+#jobList,#mapContainer{width:100%;}
 }
 
 </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+<b>JobSeed</b>
+
+<div>
+<button class="btn" onclick="openAuth()">
+<i data-lucide="user"></i> Login
+</button>
+
+<button class="btn" onclick="toggleApps()">
+<i data-lucide="file-text"></i> Applications
+</button>
+
+<button class="btn" onclick="toggleChat()">
+<i data-lucide="message-circle"></i> Chat
+</button>
+</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+<h1>Find Jobs <span>Nearby</span></h1>
+<p>Find trusted local jobs and apply with confidence</p>
+</div>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+<div class="stat">Applications: <span id="statApps">0</span></div>
+<div class="stat">Accepted: <span id="statAccepted">0</span></div>
+<div class="stat">Rejected: <span id="statRejected">0</span></div>
+<div class="stat">Saved Jobs: <span id="statSaved">0</span></div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters">
+<input placeholder="Search jobs..." onkeyup="searchJobs(this.value)">
+<select onchange="filterRating(this.value)">
+<option value="">Rating</option>
+<option value="4">4+</option>
+<option value="4.5">4.5+</option>
+</select>
+
+<button class="btn" onclick="sortJobs('rating')">Top Rated</button>
+<button class="btn" onclick="sortJobs('pay')">Highest Pay</button>
+<button class="btn" onclick="findNearbyJobs()">Nearby</button>
+</div>
+
+<!-- MAIN -->
+<div class="layout">
+<div id="jobList"></div>
+<div id="mapContainer"></div>
+</div>
+
+</div>
+
+<!-- AUTH -->
+<div id="authPopup" class="popup">
+<div class="popup-box">
+<h3>Login</h3>
+<input id="authName" placeholder="Username">
+<button class="btn" onclick="login()">Enter</button>
+</div>
+</div>
+
+<!-- APPLICATIONS -->
+<div id="appsPopup" class="popup">
+<div class="popup-box">
+<h3>Your Applications</h3>
+<div id="appList"></div>
+<button class="btn" onclick="toggleApps()">Close</button>
+</div>
+</div>
+
+<!-- APPLY -->
+<div id="applyPopup" class="popup">
+<div class="popup-box">
+<h3>Apply</h3>
+<input id="nameInput" placeholder="Name">
+<input id="reasonInput" placeholder="Why should we hire you?">
+<button class="btn" onclick="submitApplication()">Submit</button>
+</div>
+</div>
+
+<!-- CHAT -->
+<div id="chatPopup" class="popup">
+<div class="popup-box chat-style">
+<div id="chatUsers" class="chat-sidebar"></div>
+
+<div class="chat-main">
+<div id="chatMessages" class="chat-messages"></div>
+<input id="msgInput">
+<button class="btn" onclick="sendMsg()">Send</button>
+</div>
+</div>
+</div>
+
+<script>
+
+/* =========================
+DATABASE
+========================= */
+let db = JSON.parse(localStorage.getItem("db")) || {
+user:null,
+applications:[],
+reviews:[],
+chats:{},
+saved:[]
+};
+
+function saveDB(){
+localStorage.setItem("db",JSON.stringify(db));
+}
+
+/* =========================
+AUTH
+========================= */
+function openAuth(){
+authPopup.style.display="flex";
+}
+
+function login(){
+db.user=authName.value;
+saveDB();
+authPopup.style.display="none";
+}
+
+/* =========================
+JOBS DATA
+========================= */
+const jobs = Array.from({length:10},(_,i)=>({
+title:["Barista","Retail","Hotel","Waiter","Cleaner","Delivery","Dog Walker","Spa","Cashier","Kitchen"][i],
+company:"Company "+(i+1),
+pay:400+i*50,
+rating:4+Math.random(),
+reviews:Math.floor(Math.random()*50),
+lat:12.9+Math.random()/10,
+lng:100.8+Math.random()/10,
+img:`https://source.unsplash.com/800x500/?work,office,job,${i}`
+}));
+
+let selectedJob=null;
+let currentChat=null;
+
+/* =========================
+STAR FUNCTION
+========================= */
+function getStars(rating){
+let full=Math.floor(rating);
+let empty=5-full;
+return "★".repeat(full)+"☆".repeat(empty);
+}
+
+/* =========================
+RENDER JOB CARD
+========================= */
+function createJobCard(job){
+return `
+<div class="card">
+<img src="${job.img}">
+
+<b>${job.title}</b><br>
+${job.company}<br>
+฿${job.pay}<br>
+
+<div class="stars">${getStars(job.rating)}</div>
+
+<div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap;">
+
+<button class="btn" onclick='applyJob(${JSON.stringify(job)})'>
+<i data-lucide="send"></i> Apply
+</button>
+
+<button class="btn" onclick='saveJob(${JSON.stringify(job)})'>
+<i data-lucide="heart"></i>
+</button>
+
+<button class="btn" onclick="viewLocation(${job.lat},${job.lng})">
+<i data-lucide="map-pin"></i>
+</button>
+
+</div>
+
+</div>
+`;
+}
+
+/* =========================
+RENDER JOBS
+========================= */
+function renderJobs(list){
+jobList.innerHTML=list.map(j=>createJobCard(j)).join("");
+lucide.createIcons();
+}
+
+/* =========================
+LOCATION
+========================= */
+function viewLocation(lat,lng){
+mapContainer.innerHTML=`
+<iframe width="100%" height="400"
+src="https://www.google.com/maps?q=${lat},${lng}&output=embed">
+</iframe>`;
+}
+
+/* =========================
+APPLY
+========================= */
+function applyJob(job){
+selectedJob=job;
+applyPopup.style.display="flex";
+}
+
+function submitApplication(){
+if(!db.user){alert("Login first");return;}
+
+db.applications.push({
+user:db.user,
+job:selectedJob,
+status:"pending"
+});
+
+saveDB();
+updateStats();
+applyPopup.style.display="none";
+
+simulateDecision();
+}
+
+/* =========================
+AI DECISION
+========================= */
+function simulateDecision(){
+setTimeout(()=>{
+db.applications.forEach(a=>{
+if(a.status==="pending"){
+a.status=Math.random()>0.5?"accepted":"rejected";
+}
+});
+saveDB();
+updateStats();
+renderApps();
+},2000);
+}
+
+/* =========================
+SAVE JOB
+========================= */
+function saveJob(job){
+db.saved.push(job);
+saveDB();
+updateStats();
+}
+
+/* =========================
+STATS
+========================= */
+function updateStats(){
+statApps.innerText=db.applications.length;
+statAccepted.innerText=db.applications.filter(a=>a.status==="accepted").length;
+statRejected.innerText=db.applications.filter(a=>a.status==="rejected").length;
+statSaved.innerText=db.saved.length;
+}
+
+/* =========================
+APPLICATIONS
+========================= */
+function renderApps(){
+appList.innerHTML=db.applications.map(a=>`
+<div>${a.job.title} - ${a.status}</div>
+`).join("");
+}
+
+function toggleApps(){
+appsPopup.style.display=appsPopup.style.display==="flex"?"none":"flex";
+renderApps();
+}
+
+/* =========================
+CHAT
+========================= */
+function toggleChat(){
+chatPopup.style.display=chatPopup.style.display==="flex"?"none":"flex";
+renderUsers();
+}
+
+function renderUsers(){
+chatUsers.innerHTML=db.applications.map(a=>`
+<div onclick="openChat('${a.job.company}')">${a.job.company}</div>
+`).join("");
+}
+
+function openChat(name){
+currentChat=name;
+chatMessages.innerHTML=(db.chats[name]||[]).map(m=>`
+<div class="msg ${m.type}">${m.text}</div>
+`).join("");
+}
+
+function sendMsg(){
+let text=msgInput.value;
+if(!text)return;
+
+if(!db.chats[currentChat]) db.chats[currentChat]=[];
+
+db.chats[currentChat].push({text,type:"user"});
+db.chats[currentChat].push({text:"Reply soon",type:"business"});
+
+saveDB();
+openChat(currentChat);
+msgInput.value="";
+}
+
+/* =========================
+FILTERS
+========================= */
+function filterRating(val){
+renderJobs(jobs.filter(j=>j.rating>=val));
+}
+
+function sortJobs(type){
+let sorted=[...jobs];
+
+if(type==="rating"){
+sorted.sort((a,b)=>b.rating-a.rating);
+}
+
+if(type==="pay"){
+sorted.sort((a,b)=>b.pay-a.pay);
+}
+
+renderJobs(sorted);
+}
+
+/* =========================
+SEARCH
+========================= */
+function searchJobs(q){
+renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
+}
+
+/* =========================
+LOCATION FINDER
+========================= */
+function findNearbyJobs(){
+navigator.geolocation.getCurrentPosition(pos=>{
+viewLocation(pos.coords.latitude,pos.coords.longitude);
+});
+}
+
+/* =========================
+INIT
+========================= */
+renderJobs(jobs);
+updateStats();
+
+</script>
+
+</body>
+</html>

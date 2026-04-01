@@ -12,237 +12,157 @@ body { font-family: 'Inter', sans-serif; margin:0; background:#f0fdf4; }
 
 .navbar {
     background:white; padding:15px; display:flex;
-    justify-content:space-between; flex-wrap:wrap;
-}
-.logo { color:#16a34a; font-weight:bold; }
-
-.nav-links a {
-    background:#16a34a; color:white; padding:8px;
-    border-radius:8px; text-decoration:none; margin-left:5px;
+    justify-content:space-between;
 }
 
-.container { max-width:1100px; margin:25px auto; padding:15px; }
+.container { max-width:1200px; margin:20px auto; padding:15px; }
 
-.jobs,.applications {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+.layout {
+    display:flex;
     gap:15px;
+    margin-top:20px;
 }
 
-.card,.app-card {
-    background:white; padding:12px; border-radius:12px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+#jobList {
+    width:50%;
+    max-height:500px;
+    overflow-y:auto;
 }
 
-.card img { width:100%; height:140px; object-fit:cover; border-radius:10px; }
-
-.btn { margin-top:6px; padding:6px; border:none; border-radius:8px; cursor:pointer; }
-.apply { background:#16a34a; color:white; }
-.save { background:#e5e7eb; }
-.saved { background:gold; }
-
-.status { margin-top:5px; font-size:0.85rem; }
-.pending { color:orange; }
-.accepted { color:green; }
-.rejected { color:red; }
-
-.search input {
-    width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;
+#mapContainer {
+    width:50%;
 }
 
-/* MAP */
-#map {
-    height:300px;
+.card {
+    background:white;
+    padding:12px;
     border-radius:12px;
-    margin-bottom:20px;
+    margin-bottom:10px;
+    cursor:pointer;
 }
 
-/* CHAT */
-.chat-container { display:flex; background:white; border-radius:12px; overflow:hidden; margin-top:20px; }
-.chat-list { width:30%; border-right:1px solid #eee; }
-.chat-user { padding:10px; cursor:pointer; }
-.chat-user.active { background:#dcfce7; }
-
-.chat-box { width:70%; display:flex; flex-direction:column; }
-.chat-header { background:#16a34a; color:white; padding:10px; }
-
-.chat-messages { height:200px; overflow-y:auto; padding:10px; }
-
-.msg { padding:6px 10px; border-radius:10px; margin:5px 0; max-width:70%; }
-.user { background:#16a34a; color:white; margin-left:auto; }
-.business { background:#f1f5f9; }
-
-.chat-input { display:flex; }
-.chat-input input { flex:1; padding:10px; border:none; }
-.chat-input button { background:#16a34a; color:white; border:none; padding:10px; }
-
-.modal {
-    display:none; position:fixed; top:0; left:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.4);
-    justify-content:center; align-items:center;
+.card img {
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:10px;
 }
 
-.modal-content {
-    background:white; padding:20px; border-radius:12px;
-    width:300px; display:flex; flex-direction:column; gap:10px;
+button {
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#16a34a;
+    color:white;
+    cursor:pointer;
 }
 
-.modal-content input {
-    padding:10px; border-radius:8px; border:1px solid #ddd;
+@media(max-width:768px){
+    .layout { flex-direction:column; }
+    #jobList, #mapContainer { width:100%; }
 }
-
-.cancel { background:#ef4444; color:white; }
 </style>
 </head>
 
 <body>
 
 <div class="navbar">
-    <div class="logo">🌱 JobSeed</div>
-    <div class="nav-links">
-        <a href="#jobs">Jobs</a>
-        <a href="#applications">Applications</a>
-        <a href="#chat">Chat</a>
-    </div>
+    <b>🌱 JobSeed</b>
 </div>
 
-<div id="jobs" class="container">
+<div class="container">
     <h1>Jobs</h1>
 
-    <div class="search">
-        <input placeholder="Search jobs..." onkeyup="searchJobs(this.value)">
-    </div>
+    <input placeholder="Search jobs..." onkeyup="searchJobs(this.value)">
 
-    <button onclick="findNearbyJobs()" style="margin-top:10px;padding:10px;border:none;border-radius:10px;background:#16a34a;color:white;">
-        📍 Show Nearby Jobs
-    </button>
+    <button onclick="findNearbyJobs()">📍 Show Nearby Jobs</button>
 
-    <div id="map"></div>
-
-    <div id="jobList" class="jobs"></div>
-</div>
-
-<div id="applications" class="container">
-    <h1>Applications</h1>
-    <div id="appList" class="applications"></div>
-</div>
-
-<div id="chat" class="container">
-    <h1>Messages</h1>
-    <div class="chat-container">
-        <div id="chatUsers" class="chat-list"></div>
-
-        <div class="chat-box">
-            <div id="chatTitle" class="chat-header">Select Chat</div>
-            <div id="chatMessages" class="chat-messages"></div>
-
-            <div class="chat-input">
-                <input id="msgInput" placeholder="Message">
-                <button onclick="sendMsg()">Send</button>
-            </div>
-        </div>
+    <div class="layout">
+        <div id="jobList"></div>
+        <div id="mapContainer"></div>
     </div>
 </div>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 
 <script>
-const jobs=[
-{title:"Barista Assistant",company:"Bean Café",pay:"฿500/day",lat:12.68,lng:101.28,img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800"},
-{title:"Retail Helper",company:"SportZone",pay:"฿550/day",lat:12.69,lng:101.27,img:"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800"},
-{title:"Dog Walker",company:"Happy Paws",pay:"฿400/day",lat:12.67,lng:101.29,img:"https://images.unsplash.com/photo-1558944351-c3c14e1d5c1f?auto=format&fit=crop&w=800"},
-{title:"Cashier",company:"7-Eleven",pay:"฿520/day",lat:12.66,lng:101.30,img:"https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=800"},
-{title:"Waiter",company:"Beach Restaurant",pay:"฿600/day",lat:12.70,lng:101.26,img:"https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800"}
+
+// JOBS (PATTAYA)
+const jobs = [
+{title:"Barista Assistant",company:"Cafe Amazon",pay:"฿500/day",lat:12.934,lng:100.889,img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb"},
+{title:"Retail Helper",company:"Central Festival",pay:"฿550/day",lat:12.933,lng:100.883,img:"https://images.unsplash.com/photo-1512436991641-6745cdb1723f"},
+{title:"Hotel Assistant",company:"Hilton Pattaya",pay:"฿700/day",lat:12.934,lng:100.883,img:"https://images.unsplash.com/photo-1566073771259-6a8506099945"},
+{title:"Waiter",company:"Beach Restaurant",pay:"฿600/day",lat:12.931,lng:100.877,img:"https://images.unsplash.com/photo-1559339352-11d035aa65de"}
 ];
 
-let map;
-
-function initMap(){
-    const center={lat:12.68,lng:101.28};
-    map=new google.maps.Map(document.getElementById("map"),{
-        zoom:13,
-        center:center
+// RENDER JOBS
+function renderJobs(list){
+    let html="";
+    list.forEach((j,i)=>{
+        html+=`
+        <div class="card" onclick="showOnMap(${j.lat},${j.lng})">
+            <img src="${j.img}">
+            <b>${j.title}</b><br>
+            ${j.company}<br>
+            ${j.pay}<br>
+            ${j.distance ? "📍 "+j.distance.toFixed(1)+" km away" : ""}
+        </div>`;
     });
-
-    renderMapMarkers(jobs);
+    jobList.innerHTML=html;
 }
 
-function renderMapMarkers(list){
-    list.forEach(job=>{
-        const marker=new google.maps.Marker({
-            position:{lat:job.lat,lng:job.lng},
-            map:map,
-            title:job.title
-        });
-
-        const info=new google.maps.InfoWindow({
-            content:`<b>${job.title}</b><br>${job.company}<br>${job.pay}`
-        });
-
-        marker.addListener("click",()=>info.open(map,marker));
-    });
+// SHOW MAP LOCATION
+function showOnMap(lat,lng){
+    mapContainer.innerHTML = `
+        <iframe
+        width="100%"
+        height="500"
+        style="border-radius:12px"
+        src="https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed">
+        </iframe>
+    `;
 }
 
+// SEARCH
+function searchJobs(q){
+    renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
+}
+
+// DISTANCE
 function getDistance(lat1, lon1, lat2, lon2){
     const R=6371;
     const dLat=(lat2-lat1)*Math.PI/180;
     const dLon=(lon2-lon1)*Math.PI/180;
 
-    const a=Math.sin(dLat/2)*Math.sin(dLat/2)+
+    const a=Math.sin(dLat/2)**2 +
         Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
-        Math.sin(dLon/2)*Math.sin(dLon/2);
+        Math.sin(dLon/2)**2;
 
-    const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-    return R*c;
+    return R*(2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
 }
 
+// NEARBY
 function findNearbyJobs(){
     navigator.geolocation.getCurrentPosition(pos=>{
         const userLat=pos.coords.latitude;
         const userLng=pos.coords.longitude;
 
-        map.setCenter({lat:userLat,lng:userLng});
-
-        new google.maps.Marker({
-            position:{lat:userLat,lng:userLng},
-            map:map,
-            icon:"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-        });
-
         let list=jobs.map(j=>{
-            const distance=getDistance(userLat,userLng,j.lat,j.lng);
-            return {...j,distance};
+            const d=getDistance(userLat,userLng,j.lat,j.lng);
+            return {...j,distance:d};
         });
 
         list.sort((a,b)=>a.distance-b.distance);
-
         renderJobs(list);
-    });
+
+        showOnMap(userLat,userLng);
+
+    },()=>alert("Allow location"));
 }
 
-function renderJobs(list=jobs){
-let html="";
-list.forEach(j=>{
-html+=`
-<div class="card">
-<img src="${j.img}">
-<b>${j.title}</b><br>
-${j.company}<br>
-${j.pay}<br>
-${j.distance ? "📍 "+j.distance.toFixed(1)+" km away" : ""}
-<button class="btn apply">Apply</button>
-</div>`;
-});
-jobList.innerHTML=html;
-}
+// DEFAULT LOAD
+renderJobs(jobs);
+showOnMap(12.93,100.88);
 
-function searchJobs(q){
-renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
-}
-
-initMap();
-renderJobs();
 </script>
 
 </body>

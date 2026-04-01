@@ -3,324 +3,1288 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobSeed Dashboard - Find Local Jobs</title>
 
-<title>JobSeed Dashboard</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-
 /* ================= DESIGN SYSTEM ================= */
 :root{
---primary:#16a34a;
---bg:#f0fdf4;
---card:#ffffff;
---text:#052e16;
---shadow:0 10px 25px rgba(0,0,0,0.08);
+  --primary:#16a34a;
+  --primary-dark:#15803d;
+  --primary-light:#dcfce7;
+  --bg:#f0fdf4;
+  --card:#ffffff;
+  --text:#052e16;
+  --text-muted:#64748b;
+  --border:#e2e8f0;
+  --shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
+  --radius:12px;
+  --transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
 /* ================= GLOBAL ================= */
 body{
-margin:0;
-font-family:'Inter',sans-serif;
-background:linear-gradient(135deg,#f0fdf4,#dcfce7,#bbf7d0);
-color:var(--text);
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 50%,#bbf7d0 100%);
+  background-attachment:fixed;
+  color:var(--text);
+  min-height:100vh;
 }
 
 h1,h2,h3{
-font-family:'Space Grotesk',sans-serif;
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
 }
 
 /* ================= NAVBAR ================= */
 .navbar{
-display:flex;
-justify-content:space-between;
-padding:18px 30px;
-background:rgba(255,255,255,0.8);
-backdrop-filter:blur(10px);
-position:sticky;
-top:0;
-z-index:1000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 24px;
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(12px);
+  position:sticky;
+  top:0;
+  z-index:1000;
+  border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow);
 }
 
 .logo{
-font-weight:700;
-font-size:20px;
-color:var(--primary);
+  font-weight:700;
+  font-size:24px;
+  color:var(--primary);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:'Space Grotesk',sans-serif;
 }
 
+.logo::before{
+  content:"🌱";
+  font-size:28px;
+}
+
+.nav-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.user-info{
+  display:none;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  color:var(--text-muted);
+}
+
+.user-info.active{
+  display:flex;
+}
+
+/* ================= BUTTONS ================= */
 .btn{
-background:var(--primary);
-color:white;
-padding:10px 16px;
-border-radius:10px;
-border:none;
-cursor:pointer;
-font-weight:600;
+  background:var(--primary);
+  color:white;
+  padding:10px 18px;
+  border-radius:var(--radius);
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  font-size:14px;
+  transition:var(--transition);
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  box-shadow:0 1px 2px 0 rgba(0,0,0,0.05);
+}
+
+.btn:hover{
+  background:var(--primary-dark);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-lg);
+}
+
+.btn:active{
+  transform:translateY(0);
+}
+
+.btn-secondary{
+  background:white;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.btn-secondary:hover{
+  background:var(--bg);
+  border-color:var(--primary);
+}
+
+.btn-small{
+  padding:6px 12px;
+  font-size:12px;
+}
+
+.btn-filter{
+  background:white;
+  color:var(--text);
+  border:1px solid var(--border);
+  padding:8px 16px;
+  font-size:13px;
+}
+
+.btn-filter.active{
+  background:var(--primary);
+  color:white;
+  border-color:var(--primary);
+}
+
+/* ================= CONTAINER ================= */
+.container{
+  max-width:1400px;
+  margin:0 auto;
+  padding:24px;
+}
+
+/* ================= SEARCH & FILTERS ================= */
+.controls{
+  background:white;
+  padding:20px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  margin-bottom:24px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.search-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.search-input{
+  flex:1;
+  min-width:250px;
+  padding:12px 16px;
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  font-size:14px;
+  transition:var(--transition);
+  font-family:'Inter',sans-serif;
+}
+
+.search-input:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(22,163,74,0.1);
+}
+
+.filter-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.filter-label{
+  font-size:13px;
+  color:var(--text-muted);
+  font-weight:500;
+  margin-right:4px;
 }
 
 /* ================= LAYOUT ================= */
-.container{
-max-width:1200px;
-margin:auto;
-padding:20px;
+.layout{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:24px;
+  align-items:start;
 }
 
-.layout{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
+@media (max-width:1024px){
+  .layout{
+    grid-template-columns:1fr;
+  }
 }
 
 /* ================= JOB GRID ================= */
 .job-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:16px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+
+@media (max-width:640px){
+  .job-grid{
+    grid-template-columns:1fr;
+  }
 }
 
 /* ================= CARD ================= */
 .card{
-background:var(--card);
-border-radius:16px;
-box-shadow:var(--shadow);
-overflow:hidden;
-transition:0.25s;
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:var(--transition);
+  border:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
 }
 
 .card:hover{
-transform:translateY(-6px);
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-lg);
+  border-color:var(--primary-light);
+}
+
+.card-image-wrapper{
+  position:relative;
+  width:100%;
+  height:160px;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--primary-light),#bbf7d0);
 }
 
 .card img{
-width:100%;
-height:140px;
-object-fit:cover;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform 0.3s ease;
+}
+
+.card:hover img{
+  transform:scale(1.05);
+}
+
+.category-badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  background:rgba(255,255,255,0.95);
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+  color:var(--primary);
+  backdrop-filter:blur(4px);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
 }
 
 .card-content{
-padding:12px;
+  padding:16px;
+  flex:1;
+  display:flex;
+  flex-direction:column;
 }
 
 .card-title{
-font-weight:600;
+  font-weight:700;
+  font-size:18px;
+  margin-bottom:4px;
+  color:var(--text);
+  font-family:'Space Grotesk',sans-serif;
 }
 
-.card-sub{
-font-size:13px;
-color:#555;
+.card-company{
+  font-size:14px;
+  color:var(--text-muted);
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.card-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+
+.card-pay{
+  font-weight:700;
+  color:var(--primary);
+  font-size:16px;
+}
+
+.card-rating{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:13px;
+  color:var(--text-muted);
+  font-weight:500;
+}
+
+.card-rating .star{
+  color:#fbbf24;
 }
 
 .actions{
-margin-top:8px;
-display:flex;
-gap:6px;
-flex-wrap:wrap;
+  display:flex;
+  gap:8px;
+  margin-top:auto;
 }
 
-/* ================= MAP ================= */
-.map-box{
-background:white;
-padding:12px;
-border-radius:12px;
-margin-top:10px;
-box-shadow:var(--shadow);
+.actions .btn{
+  flex:1;
+  justify-content:center;
+}
+
+/* ================= MAP PANEL ================= */
+.map-panel{
+  background:white;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  position:sticky;
+  top:80px;
+  border:1px solid var(--border);
+}
+
+.map-header{
+  padding:16px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.map-title{
+  font-weight:600;
+  font-size:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.map-container{
+  height:300px;
+  background:var(--bg);
+  position:relative;
+}
+
+.map-container iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+.map-placeholder{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:var(--text-muted);
+  text-align:center;
+  padding:20px;
+}
+
+.map-placeholder-icon{
+  font-size:48px;
+  margin-bottom:12px;
+  opacity:0.5;
+}
+
+.map-info{
+  padding:16px;
+  background:var(--bg);
+  border-top:1px solid var(--border);
+}
+
+.map-info-title{
+  font-weight:600;
+  margin-bottom:4px;
+  color:var(--text);
+}
+
+.map-info-subtitle{
+  font-size:13px;
+  color:var(--text-muted);
+  margin-bottom:12px;
+}
+
+/* ================= AUTH MODAL ================= */
+.modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  z-index:2000;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.modal.active{
+  display:flex;
+  animation:fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+.modal-content{
+  background:white;
+  border-radius:var(--radius);
+  width:100%;
+  max-width:420px;
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+  animation:slideUp 0.3s ease;
+}
+
+@keyframes slideUp{
+  from{transform:translateY(20px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+.modal-header{
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-title{
+  font-size:20px;
+  font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+}
+
+.modal-close{
+  background:none;
+  border:none;
+  font-size:24px;
+  cursor:pointer;
+  color:var(--text-muted);
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  transition:var(--transition);
+}
+
+.modal-close:hover{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+.form-label{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:6px;
+}
+
+.form-input{
+  width:100%;
+  padding:12px;
+  border:2px solid var(--border);
+  border-radius:8px;
+  font-size:14px;
+  transition:var(--transition);
+  font-family:'Inter',sans-serif;
+}
+
+.form-input:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(22,163,74,0.1);
+}
+
+.form-hint{
+  font-size:12px;
+  color:var(--text-muted);
+  margin-top:4px;
 }
 
 /* ================= CHAT ================= */
-.popup{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.4);
-justify-content:center;
-align-items:center;
+.chat-popup{
+  display:none;
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:380px;
+  max-height:500px;
+  background:white;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);
+  z-index:1500;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid var(--border);
 }
 
-.chat{
-background:white;
-width:90%;
-max-width:600px;
-border-radius:12px;
-overflow:hidden;
+.chat-popup.active{
+  display:flex;
+  animation:slideUp 0.3s ease;
 }
 
 .chat-header{
-display:flex;
-justify-content:space-between;
-padding:12px;
-border-bottom:1px solid #eee;
+  padding:16px;
+  background:var(--primary);
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.chat-title{
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.chat-status{
+  font-size:11px;
+  opacity:0.9;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.chat-status::before{
+  content:"";
+  width:6px;
+  height:6px;
+  background:#4ade80;
+  border-radius:50%;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:0.5}
+}
+
+.chat-close{
+  background:none;
+  border:none;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  transition:var(--transition);
+}
+
+.chat-close:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+.chat-messages{
+  flex:1;
+  overflow-y:auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  max-height:300px;
 }
 
 .msg{
-padding:8px;
-border-radius:10px;
-margin:6px;
-max-width:70%;
+  max-width:80%;
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:14px;
+  line-height:1.4;
+  animation:fadeIn 0.2s ease;
 }
 
-.user{background:#16a34a;color:white;margin-left:auto;}
-.business{background:#eee;}
-
-.chat-messages{
-height:300px;
-overflow-y:auto;
-padding:10px;
+.msg-user{
+  background:var(--primary);
+  color:white;
+  align-self:flex-end;
+  border-bottom-right-radius:4px;
 }
 
+.msg-business{
+  background:var(--bg);
+  color:var(--text);
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
+}
+
+.msg-time{
+  font-size:10px;
+  opacity:0.7;
+  margin-top:4px;
+}
+
+.chat-input-area{
+  padding:12px;
+  border-top:1px solid var(--border);
+  display:flex;
+  gap:8px;
+  background:white;
+}
+
+.chat-input{
+  flex:1;
+  padding:10px 14px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  font-size:14px;
+  outline:none;
+  transition:var(--transition);
+}
+
+.chat-input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(22,163,74,0.1);
+}
+
+.chat-send{
+  background:var(--primary);
+  color:white;
+  border:none;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:var(--transition);
+  flex-shrink:0;
+}
+
+.chat-send:hover{
+  background:var(--primary-dark);
+  transform:scale(1.05);
+}
+
+/* ================= FLOATING CHAT BUTTON ================= */
+.fab{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  width:56px;
+  height:56px;
+  background:var(--primary);
+  color:white;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  box-shadow:var(--shadow-lg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  z-index:1400;
+  transition:var(--transition);
+}
+
+.fab:hover{
+  transform:scale(1.1) rotate(10deg);
+  background:var(--primary-dark);
+}
+
+.fab.hidden{
+  display:none;
+}
+
+/* ================= TOAST ================= */
+.toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--text);
+  color:white;
+  padding:12px 24px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:500;
+  z-index:3000;
+  opacity:0;
+  transition:all 0.3s ease;
+}
+
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+/* ================= LOADING ================= */
+.loading{
+  display:inline-block;
+  width:16px;
+  height:16px;
+  border:2px solid rgba(255,255,255,0.3);
+  border-radius:50%;
+  border-top-color:white;
+  animation:spin 0.8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+/* ================= EMPTY STATE ================= */
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--text-muted);
+}
+
+.empty-state-icon{
+  font-size:64px;
+  margin-bottom:16px;
+  opacity:0.5;
+}
+
+.empty-state-title{
+  font-size:18px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:8px;
+}
+
+/* ================= SCROLLBAR ================= */
+::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background:var(--border);
+  border-radius:4px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:var(--text-muted);
+}
 </style>
+<base target="_blank">
 </head>
 
 <body>
 
-<div class="navbar">
-<div class="logo">JobSeed</div>
-<div>
-<button class="btn" onclick="toggleChat()">Chat</button>
-<button class="btn" onclick="toggleMap()">Map</button>
-</div>
-</div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">JobSeed</div>
+  <div class="nav-actions">
+    <div class="user-info" id="userInfo">
+      <span>👤</span>
+      <span id="userName">Guest</span>
+    </div>
+    <button class="btn btn-secondary" id="authBtn" onclick="openAuth()">Sign In</button>
+    <button class="btn" onclick="toggleChat()">💬 Chat</button>
+  </div>
+</nav>
 
+<!-- MAIN CONTAINER -->
 <div class="container">
 
-<input placeholder="Search..." onkeyup="searchJobs(this.value)">
-<button class="btn" onclick="sortJobs('pay')">Top Pay</button>
-<button class="btn" onclick="sortJobs('rating')">Top Rated</button>
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-row">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search jobs, companies, or keywords..." onkeyup="handleSearch()">
+      <button class="btn" onclick="sortJobs('pay')">💰 Top Pay</button>
+      <button class="btn" onclick="sortJobs('rating')">⭐ Top Rated</button>
+      <button class="btn btn-secondary" onclick="resetFilters()">🔄 Reset</button>
+    </div>
 
-<div class="layout">
+    <div class="filter-row">
+      <span class="filter-label">Category:</span>
+      <button class="btn btn-filter active" onclick="filterCategory('all')" id="filter-all">All</button>
+      <button class="btn btn-filter" onclick="filterCategory('hospitality')" id="filter-hospitality">🏨 Hospitality</button>
+      <button class="btn btn-filter" onclick="filterCategory('retail')" id="filter-retail">🛍️ Retail</button>
+      <button class="btn btn-filter" onclick="filterCategory('food')" id="filter-food">🍽️ Food</button>
+      <button class="btn btn-filter" onclick="filterCategory('service')" id="filter-service">🧹 Service</button>
+      <button class="btn btn-filter" onclick="filterCategory('transport')" id="filter-transport">🚚 Transport</button>
+    </div>
+  </div>
 
-<div class="job-grid" id="jobList"></div>
+  <!-- LAYOUT -->
+  <div class="layout">
+    <!-- JOB GRID -->
+    <div class="job-grid" id="jobList">
+      <!-- Jobs rendered here -->
+    </div>
 
-<div id="mapContainer">Map hidden</div>
+    <!-- MAP PANEL -->
+    <div class="map-panel" id="mapPanel">
+      <div class="map-header">
+        <div class="map-title">📍 Location</div>
+        <button class="btn btn-small btn-secondary" onclick="closeMap()" id="closeMapBtn" style="display:none;">Close</button>
+      </div>
+      <div class="map-container" id="mapContainer">
+        <div class="map-placeholder">
+          <div class="map-placeholder-icon">🗺️</div>
+          <p>Select a job to view location</p>
+        </div>
+      </div>
+      <div class="map-info" id="mapInfo" style="display:none;">
+        <div class="map-info-title" id="mapCompany">Select a job</div>
+        <div class="map-info-subtitle" id="mapJob">View location on map</div>
+        <button class="btn" onclick="openInMaps()">🚀 Open in Google Maps</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">🔐 Sign In to JobSeed</div>
+      <button class="modal-close" onclick="closeAuth()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="authEmail" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="authPassword" placeholder="••••••••">
+        <div class="form-hint">Demo: Use any email/password</div>
+      </div>
+      <button class="btn" onclick="signIn()" style="width:100%;justify-content:center;">
+        <span id="authBtnText">Sign In</span>
+      </button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted);">
+        Don't have an account? <a href="#" onclick="showToast('Registration coming soon!')" style="color:var(--primary);text-decoration:none;font-weight:600;">Sign Up</a>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- CHAT -->
-<div id="chatPopup" class="popup">
-<div class="chat">
-<div class="chat-header">
-<b>Chat</b>
-<button onclick="toggleChat()">Close</button>
+<!-- CHAT POPUP -->
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-header">
+    <div class="chat-title">
+      💬 JobSeed Support
+      <div class="chat-status">Online</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">&times;</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg msg-business">
+      👋 Hi! How can we help you find your next opportunity today?
+      <div class="msg-time">Just now</div>
+    </div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeypress(event)">
+    <button class="chat-send" onclick="sendChatMessage()">➤</button>
+  </div>
 </div>
-<div id="chatMessages" class="chat-messages"></div>
-<input id="msgInput">
-<button onclick="sendMsg()">Send</button>
-</div>
-</div>
+
+<!-- FLOATING CHAT BUTTON -->
+<button class="fab" id="chatFab" onclick="toggleChat()">💬</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
+// ================= DATA =================
+const jobCategories = {
+  hospitality: { icon: '🏨', label: 'Hospitality' },
+  retail: { icon: '🛍️', label: 'Retail' },
+  food: { icon: '🍽️', label: 'Food' },
+  service: { icon: '🧹', label: 'Service' },
+  transport: { icon: '🚚', label: 'Transport' }
+};
 
-/* ================= DATA ================= */
-const jobs = Array.from({length:10},(_,i)=>({
-title:["Barista","Retail","Hotel","Waiter","Cleaner","Delivery","Spa","Cashier","Kitchen","Assistant"][i],
-company:["Cafe Amazon","Central Mall","Hilton","Beach Restaurant","CleanCo","Grab","Spa Relax","7-Eleven","Seafood","Office"][i],
-pay:400+i*50,
-rating:4+Math.random(),
-lat:12.68+(Math.random()-0.5)/50,
-lng:101.28+(Math.random()-0.5)/50,
-img:`https://source.unsplash.com/400x300/?business,job,${i}`
-}));
+const jobImages = {
+  barista: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop',
+  retail: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
+  hotel: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
+  waiter: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&h=300&fit=crop',
+  cleaner: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop',
+  delivery: 'https://images.unsplash.com/photo-1526367790999-015075668a5a?w=400&h=300&fit=crop',
+  spa: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&h=300&fit=crop',
+  cashier: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
+  kitchen: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=300&fit=crop',
+  assistant: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=400&h=300&fit=crop'
+};
 
-let selected=null;
-let mapVisible=false;
-let chats=[];
+const jobs = [
+  { id: 1, title: 'Barista', company: 'Cafe Amazon', category: 'food', pay: 450, rating: 4.5, lat: 13.7563, lng: 100.5018, img: jobImages.barista, description: 'Prepare coffee and beverages' },
+  { id: 2, title: 'Sales Associate', company: 'Central Mall', category: 'retail', pay: 400, rating: 4.2, lat: 13.7469, lng: 100.5393, img: jobImages.retail, description: 'Customer service and sales' },
+  { id: 3, title: 'Front Desk', company: 'Hilton Hotel', category: 'hospitality', pay: 550, rating: 4.8, lat: 13.7230, lng: 100.5240, img: jobImages.hotel, description: 'Guest check-in and assistance' },
+  { id: 4, title: 'Server', company: 'Beach Restaurant', category: 'food', pay: 420, rating: 4.3, lat: 12.9236, lng: 100.8825, img: jobImages.waiter, description: 'Table service and orders' },
+  { id: 5, title: 'Housekeeper', company: 'CleanCo Pro', category: 'service', pay: 380, rating: 4.1, lat: 13.7278, lng: 100.5321, img: jobImages.cleaner, description: 'Hotel room cleaning' },
+  { id: 6, title: 'Delivery Driver', company: 'Grab Delivery', category: 'transport', pay: 600, rating: 4.4, lat: 13.7367, lng: 100.5231, img: jobImages.delivery, description: 'Food delivery by motorcycle' },
+  { id: 7, title: 'Spa Therapist', company: 'Spa Relax', category: 'hospitality', pay: 500, rating: 4.6, lat: 13.7041, lng: 100.5577, img: jobImages.spa, description: 'Massage and wellness services' },
+  { id: 8, title: 'Cashier', company: '7-Eleven', category: 'retail', pay: 360, rating: 3.9, lat: 13.7563, lng: 100.5018, img: jobImages.cashier, description: 'POS operations and stocking' },
+  { id: 9, title: 'Line Cook', company: 'Seafood Grill', category: 'food', pay: 480, rating: 4.3, lat: 13.7437, lng: 100.5626, img: jobImages.kitchen, description: 'Food preparation and cooking' },
+  { id: 10, title: 'Office Assistant', company: 'TechHub Co', category: 'service', pay: 520, rating: 4.5, lat: 13.7356, lng: 100.5814, img: jobImages.assistant, description: 'Administrative support' }
+];
 
-/* ================= RENDER ================= */
-function renderJobs(list){
-jobList.innerHTML=list.map(j=>`
-<div class="card">
-<img src="${j.img}">
-<div class="card-content">
-<div class="card-title">${j.title}</div>
-<div class="card-sub">${j.company}</div>
-<div>฿${j.pay}</div>
+// ================= STATE =================
+let currentJobs = [...jobs];
+let selectedJob = null;
+let currentCategory = 'all';
+let currentUser = null;
+let chatMessages = [
+  { text: "👋 Hi! How can we help you find your next opportunity today?", type: 'business', time: new Date() }
+];
 
-<div class="actions">
-<button class="btn" onclick='selectJob(${JSON.stringify(j)})'>Map</button>
-<button class="btn">Apply</button>
-</div>
+// ================= INIT =================
+document.addEventListener('DOMContentLoaded', () => {
+  renderJobs(currentJobs);
 
-</div>
-</div>
-`).join("");
+  // Check for saved session
+  const savedUser = localStorage.getItem('jobseed_user');
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+    updateAuthUI();
+  }
+});
+
+// ================= RENDER JOBS =================
+function renderJobs(list) {
+  const container = document.getElementById('jobList');
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-title">No jobs found</div>
+        <p>Try adjusting your search or filters</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = list.map(job => `
+    <div class="card" data-category="${job.category}">
+      <div class="card-image-wrapper">
+        <img src="${job.img}" alt="${job.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/16a34a/ffffff?text=${encodeURIComponent(job.title)}'">
+        <span class="category-badge">${jobCategories[job.category].icon} ${jobCategories[job.category].label}</span>
+      </div>
+      <div class="card-content">
+        <div class="card-title">${job.title}</div>
+        <div class="card-company">🏢 ${job.company}</div>
+        <div class="card-meta">
+          <div class="card-pay">฿${job.pay}/day</div>
+          <div class="card-rating">
+            <span class="star">⭐</span>
+            <span>${job.rating.toFixed(1)}</span>
+          </div>
+        </div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">${job.description}</div>
+        <div class="actions">
+          <button class="btn btn-secondary" onclick='selectJob(${JSON.stringify(job)})'>📍 Map</button>
+          <button class="btn" onclick="applyJob('${job.title}')">✓ Apply</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
-/* ================= MAP ================= */
-function selectJob(j){
-selected=j;
-renderMap();
+// ================= SEARCH & FILTER =================
+function handleSearch() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  filterAndRender();
 }
 
-function toggleMap(){
-mapVisible=!mapVisible;
-renderMap();
+function filterCategory(category) {
+  currentCategory = category;
+
+  // Update active button
+  document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(`filter-${category}`).classList.add('active');
+
+  filterAndRender();
 }
 
-function renderMap(){
-if(!mapVisible || !selected){
-mapContainer.innerHTML="Map hidden";
-return;
+function filterAndRender() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+
+  let filtered = jobs.filter(job => {
+    const matchesSearch = job.title.toLowerCase().includes(query) || 
+                         job.company.toLowerCase().includes(query) ||
+                         job.description.toLowerCase().includes(query);
+    const matchesCategory = currentCategory === 'all' || job.category === currentCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  currentJobs = filtered;
+  renderJobs(currentJobs);
 }
 
-mapContainer.innerHTML=`
-<iframe width="100%" height="300"
-src="https://www.google.com/maps?q=${selected.lat},${selected.lng}&output=embed"></iframe>
-
-<div class="map-box">
-<b>${selected.company}</b><br>
-${selected.title}<br>
-<button class="btn" onclick="openMaps(${selected.lat},${selected.lng})">Open</button>
-</div>
-`;
+function resetFilters() {
+  document.getElementById('searchInput').value = '';
+  currentCategory = 'all';
+  document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('filter-all').classList.add('active');
+  currentJobs = [...jobs];
+  renderJobs(currentJobs);
 }
 
-function openMaps(lat,lng){
-window.open(`https://www.google.com/maps?q=${lat},${lng}`);
+// ================= SORT =================
+function sortJobs(type) {
+  let sorted = [...currentJobs];
+  if (type === 'pay') {
+    sorted.sort((a, b) => b.pay - a.pay);
+    showToast('Sorted by highest pay 💰');
+  }
+  if (type === 'rating') {
+    sorted.sort((a, b) => b.rating - a.rating);
+    showToast('Sorted by top rating ⭐');
+  }
+  currentJobs = sorted;
+  renderJobs(currentJobs);
 }
 
-/* ================= SORT ================= */
-function sortJobs(type){
-let sorted=[...jobs];
-if(type==="pay") sorted.sort((a,b)=>b.pay-a.pay);
-if(type==="rating") sorted.sort((a,b)=>b.rating-a.rating);
-renderJobs(sorted);
+// ================= MAP =================
+function selectJob(job) {
+  selectedJob = job;
+
+  // Update map panel
+  document.getElementById('mapContainer').innerHTML = `
+    <iframe 
+      width="100%" 
+      height="100%" 
+      style="border:0" 
+      loading="lazy" 
+      allowfullscreen 
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10000!2d${job.lng}!3d${job.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1234567890">
+    </iframe>
+  `;
+
+  document.getElementById('mapInfo').style.display = 'block';
+  document.getElementById('closeMapBtn').style.display = 'inline-flex';
+  document.getElementById('mapCompany').textContent = job.company;
+  document.getElementById('mapJob').textContent = `${job.title} • ฿${job.pay}/day`;
+
+  // Scroll to map on mobile
+  if (window.innerWidth <= 1024) {
+    document.getElementById('mapPanel').scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
-/* ================= CHAT ================= */
-function toggleChat(){
-chatPopup.style.display=chatPopup.style.display==="flex"?"none":"flex";
+function closeMap() {
+  selectedJob = null;
+  document.getElementById('mapContainer').innerHTML = `
+    <div class="map-placeholder">
+      <div class="map-placeholder-icon">🗺️</div>
+      <p>Select a job to view location</p>
+    </div>
+  `;
+  document.getElementById('mapInfo').style.display = 'none';
+  document.getElementById('closeMapBtn').style.display = 'none';
 }
 
-function sendMsg(){
-let text=msgInput.value;
-if(!text)return;
-
-chats.push({text,type:"user"});
-chats.push({text:"We will respond shortly",type:"business"});
-
-msgInput.value="";
-renderChat();
+function openInMaps() {
+  if (selectedJob) {
+    window.open(`https://www.google.com/maps/search/?api=1&query=${selectedJob.lat},${selectedJob.lng}`, '_blank');
+  }
 }
 
-function renderChat(){
-chatMessages.innerHTML=chats.map(m=>`
-<div class="msg ${m.type}">${m.text}</div>
-`).join("");
+// ================= AUTH =================
+function openAuth() {
+  if (currentUser) {
+    // Sign out
+    currentUser = null;
+    localStorage.removeItem('jobseed_user');
+    updateAuthUI();
+    showToast('Signed out successfully');
+  } else {
+    document.getElementById('authModal').classList.add('active');
+  }
 }
 
-/* ================= SEARCH ================= */
-function searchJobs(q){
-renderJobs(jobs.filter(j=>j.title.toLowerCase().includes(q.toLowerCase())));
+function closeAuth() {
+  document.getElementById('authModal').classList.remove('active');
 }
 
-/* INIT */
-renderJobs(jobs);
+function signIn() {
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
 
+  if (!email || !password) {
+    showToast('Please enter email and password');
+    return;
+  }
+
+  // Simulate auth
+  document.getElementById('authBtnText').innerHTML = '<span class="loading"></span>';
+
+  setTimeout(() => {
+    currentUser = { email, name: email.split('@')[0] };
+    localStorage.setItem('jobseed_user', JSON.stringify(currentUser));
+    updateAuthUI();
+    closeAuth();
+    showToast(`Welcome back, ${currentUser.name}! 🎉`);
+    document.getElementById('authBtnText').textContent = 'Sign In';
+  }, 1000);
+}
+
+function updateAuthUI() {
+  const authBtn = document.getElementById('authBtn');
+  const userInfo = document.getElementById('userInfo');
+  const userName = document.getElementById('userName');
+
+  if (currentUser) {
+    authBtn.textContent = 'Sign Out';
+    userInfo.classList.add('active');
+    userName.textContent = currentUser.name;
+  } else {
+    authBtn.textContent = 'Sign In';
+    userInfo.classList.remove('active');
+    userName.textContent = 'Guest';
+  }
+}
+
+// ================= CHAT =================
+function toggleChat() {
+  const popup = document.getElementById('chatPopup');
+  const fab = document.getElementById('chatFab');
+
+  if (popup.classList.contains('active')) {
+    popup.classList.remove('active');
+    fab.classList.remove('hidden');
+  } else {
+    popup.classList.add('active');
+    fab.classList.add('hidden');
+    scrollToBottom();
+  }
+}
+
+function handleChatKeypress(e) {
+  if (e.key === 'Enter') {
+    sendChatMessage();
+  }
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  // Add user message
+  const userMsg = { text, type: 'user', time: new Date() };
+  chatMessages.push(userMsg);
+  renderChat();
+  input.value = '';
+  scrollToBottom();
+
+  // Simulate response
+  setTimeout(() => {
+    const responses = [
+      "Thanks for reaching out! A team member will get back to you shortly.",
+      "That's a great question! Let me check that for you.",
+      "You can find more details in the job listing. Would you like me to help with anything specific?",
+      "Our support team typically responds within 24 hours. Is there anything urgent I can help with?"
+    ];
+    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+
+    const botMsg = { text: randomResponse, type: 'business', time: new Date() };
+    chatMessages.push(botMsg);
+    renderChat();
+    scrollToBottom();
+  }, 1000 + Math.random() * 1000);
+}
+
+function renderChat() {
+  const container = document.getElementById('chatMessages');
+  container.innerHTML = chatMessages.map(msg => {
+    const time = msg.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `
+      <div class="msg msg-${msg.type}">
+        ${msg.text}
+        <div class="msg-time">${time}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function scrollToBottom() {
+  const container = document.getElementById('chatMessages');
+  container.scrollTop = container.scrollHeight;
+}
+
+// ================= APPLY =================
+function applyJob(jobTitle) {
+  if (!currentUser) {
+    showToast('Please sign in to apply for jobs');
+    openAuth();
+    return;
+  }
+  showToast(`Application sent for ${jobTitle}! ✓`);
+}
+
+// ================= TOAST =================
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// ================= UTILS =================
+// Close modal on outside click
+document.getElementById('authModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeAuth();
+});
+
+// Escape key to close modals
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeAuth();
+    document.getElementById('chatPopup').classList.remove('active');
+    document.getElementById('chatFab').classList.remove('hidden');
+  }
+});
 </script>
 
 </body>

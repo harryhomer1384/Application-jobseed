@@ -18,6 +18,12 @@
   --text:#052e16;
   --text-muted:#64748b;
   --border:#e2e8f0;
+  --warning:#f59e0b;
+  --warning-light:#fef3c7;
+  --danger:#ef4444;
+  --danger-light:#fee2e2;
+  --success:#10b981;
+  --success-light:#d1fae5;
   --shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
   --shadow-lg:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
   --radius:12px;
@@ -70,9 +76,16 @@ h1,h2,h3{
   font-family:'Space Grotesk',sans-serif;
 }
 
-.logo::before{
-  content:"🌱";
-  font-size:28px;
+.logo-icon{
+  width:28px;
+  height:28px;
+  background:var(--primary);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:14px;
 }
 
 .nav-actions{
@@ -91,6 +104,19 @@ h1,h2,h3{
 
 .user-info.active{
   display:flex;
+}
+
+.user-avatar{
+  width:32px;
+  height:32px;
+  background:var(--primary-light);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--primary);
+  font-weight:600;
+  font-size:12px;
 }
 
 /* ================= BUTTONS ================= */
@@ -148,6 +174,24 @@ h1,h2,h3{
   background:var(--primary);
   color:white;
   border-color:var(--primary);
+}
+
+.btn-warning{
+  background:var(--warning);
+  color:white;
+}
+
+.btn-warning:hover{
+  background:#d97706;
+}
+
+.btn-danger{
+  background:var(--danger);
+  color:white;
+}
+
+.btn-danger:hover{
+  background:#dc2626;
 }
 
 /* ================= CONTAINER ================= */
@@ -224,7 +268,7 @@ h1,h2,h3{
 /* ================= JOB GRID ================= */
 .job-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
   gap:20px;
 }
 
@@ -310,6 +354,36 @@ h1,h2,h3{
   gap:4px;
 }
 
+.card-location{
+  font-size:13px;
+  color:var(--primary);
+  margin-bottom:8px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 8px;
+  background:var(--primary-light);
+  border-radius:6px;
+  width:fit-content;
+  transition:var(--transition);
+}
+
+.card-location:hover{
+  background:var(--primary);
+  color:white;
+}
+
+.card-location::before{
+  content:"";
+  width:12px;
+  height:12px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'/%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'/%3E%3C/svg%3E");
+  background-size:contain;
+  background-repeat:no-repeat;
+  display:inline-block;
+}
+
 .card-meta{
   display:flex;
   justify-content:space-between;
@@ -336,6 +410,32 @@ h1,h2,h3{
 
 .card-rating .star{
   color:#fbbf24;
+}
+
+.status-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.status-pending{
+  background:var(--warning-light);
+  color:#92400e;
+}
+
+.status-accepted{
+  background:var(--success-light);
+  color:#065f46;
+}
+
+.status-rejected{
+  background:var(--danger-light);
+  color:#991b1b;
 }
 
 .actions{
@@ -400,9 +500,16 @@ h1,h2,h3{
 }
 
 .map-placeholder-icon{
-  font-size:48px;
+  width:64px;
+  height:64px;
+  background:var(--primary-light);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   margin-bottom:12px;
-  opacity:0.5;
+  color:var(--primary);
+  font-size:24px;
 }
 
 .map-info{
@@ -697,6 +804,172 @@ h1,h2,h3{
   transform:scale(1.05);
 }
 
+/* ================= BUSINESS CHAT MODAL ================= */
+.business-chat-modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  z-index:2000;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.business-chat-modal.active{
+  display:flex;
+  animation:fadeIn 0.2s ease;
+}
+
+.business-chat-content{
+  background:white;
+  border-radius:var(--radius);
+  width:100%;
+  max-width:600px;
+  height:80vh;
+  max-height:700px;
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.business-chat-header{
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:var(--primary);
+  color:white;
+}
+
+.business-chat-title{
+  font-size:18px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.business-list{
+  display:flex;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+}
+
+.business-tab{
+  padding:12px 20px;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  font-size:14px;
+  font-weight:500;
+  color:var(--text-muted);
+  transition:var(--transition);
+}
+
+.business-tab.active{
+  color:var(--primary);
+  border-bottom-color:var(--primary);
+  background:white;
+}
+
+.business-tab:hover{
+  color:var(--text);
+}
+
+.business-chat-body{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+}
+
+.business-sidebar{
+  width:200px;
+  border-right:1px solid var(--border);
+  background:var(--bg);
+  overflow-y:auto;
+}
+
+.business-contact{
+  padding:12px 16px;
+  cursor:pointer;
+  border-bottom:1px solid var(--border);
+  transition:var(--transition);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.business-contact:hover{
+  background:white;
+}
+
+.business-contact.active{
+  background:white;
+  border-left:3px solid var(--primary);
+}
+
+.contact-avatar{
+  width:36px;
+  height:36px;
+  background:var(--primary-light);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--primary);
+  font-weight:600;
+  font-size:12px;
+  flex-shrink:0;
+}
+
+.contact-info{
+  flex:1;
+  min-width:0;
+}
+
+.contact-name{
+  font-weight:600;
+  font-size:13px;
+  color:var(--text);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.contact-status{
+  font-size:11px;
+  color:var(--text-muted);
+}
+
+.business-chat-area{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+.business-messages{
+  flex:1;
+  overflow-y:auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.business-input-area{
+  padding:16px;
+  border-top:1px solid var(--border);
+  display:flex;
+  gap:8px;
+  background:white;
+}
+
 /* ================= FLOATING CHAT BUTTON ================= */
 .fab{
   position:fixed;
@@ -713,7 +986,7 @@ h1,h2,h3{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
+  font-size:20px;
   z-index:1400;
   transition:var(--transition);
 }
@@ -772,9 +1045,16 @@ h1,h2,h3{
 }
 
 .empty-state-icon{
-  font-size:64px;
-  margin-bottom:16px;
-  opacity:0.5;
+  width:80px;
+  height:80px;
+  background:var(--primary-light);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 16px;
+  color:var(--primary);
+  font-size:32px;
 }
 
 .empty-state-title{
@@ -802,6 +1082,98 @@ h1,h2,h3{
 ::-webkit-scrollbar-thumb:hover{
   background:var(--text-muted);
 }
+
+/* ================= MY APPLICATIONS PANEL ================= */
+.applications-panel{
+  background:white;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:24px;
+  border:1px solid var(--border);
+}
+
+.applications-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.applications-title{
+  font-size:18px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.application-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  margin-bottom:8px;
+  transition:var(--transition);
+}
+
+.application-item:hover{
+  border-color:var(--primary);
+  background:var(--bg);
+}
+
+.application-info{
+  flex:1;
+}
+
+.application-job{
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:2px;
+}
+
+.application-company{
+  font-size:13px;
+  color:var(--text-muted);
+}
+
+.application-actions{
+  display:flex;
+  gap:8px;
+}
+
+/* ================= ICONS ================= */
+.icon{
+  width:16px;
+  height:16px;
+  display:inline-block;
+  background-size:contain;
+  background-repeat:no-repeat;
+  vertical-align:middle;
+}
+
+.icon-star::before{
+  content:"★";
+  color:#fbbf24;
+}
+
+.icon-map::before{
+  content:"⌖";
+}
+
+.icon-chat::before{
+  content:"💬";
+}
+
+.icon-briefcase::before{
+  content:"💼";
+}
+
+.icon-user::before{
+  content:"👤";
+}
 </style>
 <base target="_blank">
 </head>
@@ -810,37 +1182,56 @@ h1,h2,h3{
 
 <!-- NAVBAR -->
 <nav class="navbar">
-  <div class="logo">JobSeed</div>
+  <div class="logo">
+    <div class="logo-icon">JS</div>
+    JobSeed
+  </div>
   <div class="nav-actions">
     <div class="user-info" id="userInfo">
-      <span>👤</span>
+      <div class="user-avatar" id="userAvatar">G</div>
       <span id="userName">Guest</span>
     </div>
     <button class="btn btn-secondary" id="authBtn" onclick="openAuth()">Sign In</button>
-    <button class="btn" onclick="toggleChat()">💬 Chat</button>
+    <button class="btn" onclick="openBusinessChat()">Business Chat</button>
+    <button class="btn" onclick="toggleChat()">Support</button>
   </div>
 </nav>
 
 <!-- MAIN CONTAINER -->
 <div class="container">
 
+  <!-- MY APPLICATIONS -->
+  <div class="applications-panel" id="applicationsPanel" style="display:none;">
+    <div class="applications-header">
+      <div class="applications-title">
+        <span>My Applications</span>
+      </div>
+      <button class="btn btn-small btn-secondary" onclick="toggleApplications()">Hide</button>
+    </div>
+    <div id="applicationsList">
+      <!-- Applications rendered here -->
+    </div>
+  </div>
+
   <!-- CONTROLS -->
   <div class="controls">
     <div class="search-row">
       <input type="text" class="search-input" id="searchInput" placeholder="Search jobs, companies, or keywords..." onkeyup="handleSearch()">
-      <button class="btn" onclick="sortJobs('pay')">💰 Top Pay</button>
-      <button class="btn" onclick="sortJobs('rating')">⭐ Top Rated</button>
-      <button class="btn btn-secondary" onclick="resetFilters()">🔄 Reset</button>
+      <button class="btn" onclick="sortJobs('pay')">Top Pay</button>
+      <button class="btn" onclick="sortJobs('rating')">Top Rated</button>
+      <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
     </div>
 
     <div class="filter-row">
       <span class="filter-label">Category:</span>
       <button class="btn btn-filter active" onclick="filterCategory('all')" id="filter-all">All</button>
-      <button class="btn btn-filter" onclick="filterCategory('hospitality')" id="filter-hospitality">🏨 Hospitality</button>
-      <button class="btn btn-filter" onclick="filterCategory('retail')" id="filter-retail">🛍️ Retail</button>
-      <button class="btn btn-filter" onclick="filterCategory('food')" id="filter-food">🍽️ Food</button>
-      <button class="btn btn-filter" onclick="filterCategory('service')" id="filter-service">🧹 Service</button>
-      <button class="btn btn-filter" onclick="filterCategory('transport')" id="filter-transport">🚚 Transport</button>
+      <button class="btn btn-filter" onclick="filterCategory('hospitality')" id="filter-hospitality">Hospitality</button>
+      <button class="btn btn-filter" onclick="filterCategory('retail')" id="filter-retail">Retail</button>
+      <button class="btn btn-filter" onclick="filterCategory('food')" id="filter-food">Food</button>
+      <button class="btn btn-filter" onclick="filterCategory('service')" id="filter-service">Service</button>
+      <button class="btn btn-filter" onclick="filterCategory('transport')" id="filter-transport">Transport</button>
+      <button class="btn btn-filter" onclick="filterCategory('tech')" id="filter-tech">Tech</button>
+      <button class="btn btn-filter" onclick="filterCategory('healthcare')" id="filter-healthcare">Healthcare</button>
     </div>
   </div>
 
@@ -854,19 +1245,19 @@ h1,h2,h3{
     <!-- MAP PANEL -->
     <div class="map-panel" id="mapPanel">
       <div class="map-header">
-        <div class="map-title">📍 Location</div>
+        <div class="map-title">Location</div>
         <button class="btn btn-small btn-secondary" onclick="closeMap()" id="closeMapBtn" style="display:none;">Close</button>
       </div>
       <div class="map-container" id="mapContainer">
         <div class="map-placeholder">
-          <div class="map-placeholder-icon">🗺️</div>
+          <div class="map-placeholder-icon">M</div>
           <p>Select a job to view location</p>
         </div>
       </div>
       <div class="map-info" id="mapInfo" style="display:none;">
         <div class="map-info-title" id="mapCompany">Select a job</div>
         <div class="map-info-subtitle" id="mapJob">View location on map</div>
-        <button class="btn" onclick="openInMaps()">🚀 Open in Google Maps</button>
+        <button class="btn" onclick="openInMaps()">Open in Google Maps</button>
       </div>
     </div>
   </div>
@@ -877,8 +1268,8 @@ h1,h2,h3{
 <div class="modal" id="authModal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title">🔐 Sign In to JobSeed</div>
-      <button class="modal-close" onclick="closeAuth()">&times;</button>
+      <div class="modal-title">Sign In to JobSeed</div>
+      <button class="modal-close" onclick="closeAuth()">×</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
@@ -900,29 +1291,59 @@ h1,h2,h3{
   </div>
 </div>
 
-<!-- CHAT POPUP -->
+<!-- BUSINESS CHAT MODAL -->
+<div class="business-chat-modal" id="businessChatModal">
+  <div class="business-chat-content">
+    <div class="business-chat-header">
+      <div class="business-chat-title">
+        <span>Business Messages</span>
+      </div>
+      <button class="modal-close" onclick="closeBusinessChat()" style="color:white;">×</button>
+    </div>
+    <div class="business-list">
+      <div class="business-tab active" onclick="switchBusinessTab('applicants')">My Applicants</div>
+      <div class="business-tab" onclick="switchBusinessTab('businesses')">Businesses</div>
+    </div>
+    <div class="business-chat-body">
+      <div class="business-sidebar" id="businessSidebar">
+        <!-- Contacts list -->
+      </div>
+      <div class="business-chat-area">
+        <div class="business-messages" id="businessMessages">
+          <!-- Messages -->
+        </div>
+        <div class="business-input-area">
+          <input type="text" class="chat-input" id="businessChatInput" placeholder="Type a message..." onkeypress="handleBusinessChatKeypress(event)">
+          <button class="chat-send" onclick="sendBusinessMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPORT CHAT POPUP -->
 <div class="chat-popup" id="chatPopup">
   <div class="chat-header">
     <div class="chat-title">
-      💬 JobSeed Support
+      JobSeed Support
       <div class="chat-status">Online</div>
     </div>
-    <button class="chat-close" onclick="toggleChat()">&times;</button>
+    <button class="chat-close" onclick="toggleChat()">×</button>
   </div>
   <div class="chat-messages" id="chatMessages">
     <div class="msg msg-business">
-      👋 Hi! How can we help you find your next opportunity today?
+      Hi! How can we help you find your next opportunity today?
       <div class="msg-time">Just now</div>
     </div>
   </div>
   <div class="chat-input-area">
     <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeypress(event)">
-    <button class="chat-send" onclick="sendChatMessage()">➤</button>
+    <button class="chat-send" onclick="sendChatMessage()">Send</button>
   </div>
 </div>
 
 <!-- FLOATING CHAT BUTTON -->
-<button class="fab" id="chatFab" onclick="toggleChat()">💬</button>
+<button class="fab" id="chatFab" onclick="toggleChat()">Chat</button>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -930,11 +1351,13 @@ h1,h2,h3{
 <script>
 // ================= DATA =================
 const jobCategories = {
-  hospitality: { icon: '🏨', label: 'Hospitality' },
-  retail: { icon: '🛍️', label: 'Retail' },
-  food: { icon: '🍽️', label: 'Food' },
-  service: { icon: '🧹', label: 'Service' },
-  transport: { icon: '🚚', label: 'Transport' }
+  hospitality: { icon: '', label: 'Hospitality' },
+  retail: { icon: '', label: 'Retail' },
+  food: { icon: '', label: 'Food' },
+  service: { icon: '', label: 'Service' },
+  transport: { icon: '', label: 'Transport' },
+  tech: { icon: '', label: 'Tech' },
+  healthcare: { icon: '', label: 'Healthcare' }
 };
 
 const jobImages = {
@@ -947,20 +1370,62 @@ const jobImages = {
   spa: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&h=300&fit=crop',
   cashier: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
   kitchen: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=300&fit=crop',
-  assistant: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=400&h=300&fit=crop'
+  assistant: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=400&h=300&fit=crop',
+  warehouse: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
+  security: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=400&h=300&fit=crop',
+  receptionist: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=300&fit=crop',
+  nurse: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop',
+  caregiver: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=400&h=300&fit=crop',
+  developer: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop',
+  designer: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=300&fit=crop',
+  driver: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop',
+  mechanic: 'https://images.unsplash.com/photo-1632823471565-1ecdf5c6dc3e?w=400&h=300&fit=crop',
+  gardener: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=300&fit=crop',
+  tutor: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop',
+  fitness: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop',
+  event: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=300&fit=crop',
+  barber: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400&h=300&fit=crop',
+  florist: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=300&fit=crop',
+  bakery: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=300&fit=crop',
+  butcher: 'https://images.unsplash.com/photo-1607623814075-e51df1bd6565?w=400&h=300&fit=crop',
+  electrician: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&h=300&fit=crop',
+  plumber: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop',
+  painter: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&h=300&fit=crop',
+  carpenter: 'https://images.unsplash.com/photo-1601058268499-e5268d3cf6c4?w=400&h=300&fit=crop'
 };
 
+// Extended jobs list with 30+ businesses
 const jobs = [
-  { id: 1, title: 'Barista', company: 'Cafe Amazon', category: 'food', pay: 450, rating: 4.5, lat: 13.7563, lng: 100.5018, img: jobImages.barista, description: 'Prepare coffee and beverages' },
-  { id: 2, title: 'Sales Associate', company: 'Central Mall', category: 'retail', pay: 400, rating: 4.2, lat: 13.7469, lng: 100.5393, img: jobImages.retail, description: 'Customer service and sales' },
-  { id: 3, title: 'Front Desk', company: 'Hilton Hotel', category: 'hospitality', pay: 550, rating: 4.8, lat: 13.7230, lng: 100.5240, img: jobImages.hotel, description: 'Guest check-in and assistance' },
-  { id: 4, title: 'Server', company: 'Beach Restaurant', category: 'food', pay: 420, rating: 4.3, lat: 12.9236, lng: 100.8825, img: jobImages.waiter, description: 'Table service and orders' },
-  { id: 5, title: 'Housekeeper', company: 'CleanCo Pro', category: 'service', pay: 380, rating: 4.1, lat: 13.7278, lng: 100.5321, img: jobImages.cleaner, description: 'Hotel room cleaning' },
-  { id: 6, title: 'Delivery Driver', company: 'Grab Delivery', category: 'transport', pay: 600, rating: 4.4, lat: 13.7367, lng: 100.5231, img: jobImages.delivery, description: 'Food delivery by motorcycle' },
-  { id: 7, title: 'Spa Therapist', company: 'Spa Relax', category: 'hospitality', pay: 500, rating: 4.6, lat: 13.7041, lng: 100.5577, img: jobImages.spa, description: 'Massage and wellness services' },
-  { id: 8, title: 'Cashier', company: '7-Eleven', category: 'retail', pay: 360, rating: 3.9, lat: 13.7563, lng: 100.5018, img: jobImages.cashier, description: 'POS operations and stocking' },
-  { id: 9, title: 'Line Cook', company: 'Seafood Grill', category: 'food', pay: 480, rating: 4.3, lat: 13.7437, lng: 100.5626, img: jobImages.kitchen, description: 'Food preparation and cooking' },
-  { id: 10, title: 'Office Assistant', company: 'TechHub Co', category: 'service', pay: 520, rating: 4.5, lat: 13.7356, lng: 100.5814, img: jobImages.assistant, description: 'Administrative support' }
+  { id: 1, title: 'Barista', company: 'Cafe Amazon', category: 'food', pay: 450, rating: 4.5, lat: 13.7563, lng: 100.5018, img: jobImages.barista, description: 'Prepare coffee and beverages', location: 'Downtown Bangkok' },
+  { id: 2, title: 'Sales Associate', company: 'Central Mall', category: 'retail', pay: 400, rating: 4.2, lat: 13.7469, lng: 100.5393, img: jobImages.retail, description: 'Customer service and sales', location: 'Pathum Wan' },
+  { id: 3, title: 'Front Desk', company: 'Hilton Hotel', category: 'hospitality', pay: 550, rating: 4.8, lat: 13.7230, lng: 100.5240, img: jobImages.hotel, description: 'Guest check-in and assistance', location: 'Sukhumvit' },
+  { id: 4, title: 'Server', company: 'Beach Restaurant', category: 'food', pay: 420, rating: 4.3, lat: 12.9236, lng: 100.8825, img: jobImages.waiter, description: 'Table service and orders', location: 'Pattaya Beach' },
+  { id: 5, title: 'Housekeeper', company: 'CleanCo Pro', category: 'service', pay: 380, rating: 4.1, lat: 13.7278, lng: 100.5321, img: jobImages.cleaner, description: 'Hotel room cleaning', location: 'Silom' },
+  { id: 6, title: 'Delivery Driver', company: 'Grab Delivery', category: 'transport', pay: 600, rating: 4.4, lat: 13.7367, lng: 100.5231, img: jobImages.delivery, description: 'Food delivery by motorcycle', location: 'Sathorn' },
+  { id: 7, title: 'Spa Therapist', company: 'Spa Relax', category: 'hospitality', pay: 500, rating: 4.6, lat: 13.7041, lng: 100.5577, img: jobImages.spa, description: 'Massage and wellness services', location: 'Thonglor' },
+  { id: 8, title: 'Cashier', company: '7-Eleven', category: 'retail', pay: 360, rating: 3.9, lat: 13.7563, lng: 100.5018, img: jobImages.cashier, description: 'POS operations and stocking', location: 'Ratchada' },
+  { id: 9, title: 'Line Cook', company: 'Seafood Grill', category: 'food', pay: 480, rating: 4.3, lat: 13.7437, lng: 100.5626, img: jobImages.kitchen, description: 'Food preparation and cooking', location: 'Asok' },
+  { id: 10, title: 'Office Assistant', company: 'TechHub Co', category: 'service', pay: 520, rating: 4.5, lat: 13.7356, lng: 100.5814, img: jobImages.assistant, description: 'Administrative support', location: 'Rama 9' },
+  { id: 11, title: 'Warehouse Worker', company: 'Logistics Pro', category: 'service', pay: 420, rating: 4.0, lat: 13.8025, lng: 100.6130, img: jobImages.warehouse, description: 'Inventory management and packing', location: 'Ladprao' },
+  { id: 12, title: 'Security Guard', company: 'SafeGuard Security', category: 'service', pay: 400, rating: 4.1, lat: 13.7250, lng: 100.5450, img: jobImages.security, description: 'Property security and monitoring', location: 'Asoke' },
+  { id: 13, title: 'Receptionist', company: 'Grand Plaza Hotel', category: 'hospitality', pay: 480, rating: 4.4, lat: 13.7410, lng: 100.5510, img: jobImages.receptionist, description: 'Front desk and reservations', location: 'Nana' },
+  { id: 14, title: 'Nursing Assistant', company: 'Bangkok Hospital', category: 'healthcare', pay: 550, rating: 4.7, lat: 13.7450, lng: 100.5650, img: jobImages.nurse, description: 'Patient care assistance', location: 'Ploenchit' },
+  { id: 15, title: 'Caregiver', company: 'ElderCare Plus', category: 'healthcare', pay: 500, rating: 4.6, lat: 13.7680, lng: 100.5120, img: jobImages.caregiver, description: 'Elderly care and companionship', location: 'Dusit' },
+  { id: 16, title: 'Junior Developer', company: 'CodeWorks Studio', category: 'tech', pay: 800, rating: 4.8, lat: 13.7300, lng: 100.5700, img: jobImages.developer, description: 'Web development and coding', location: 'Phrom Phong' },
+  { id: 17, title: 'UI Designer', company: 'Creative Agency', category: 'tech', pay: 750, rating: 4.5, lat: 13.7200, lng: 100.5750, img: jobImages.designer, description: 'Interface design and prototyping', location: 'Thonglor' },
+  { id: 18, title: 'Private Driver', company: 'Elite Transport', category: 'transport', pay: 650, rating: 4.3, lat: 13.7100, lng: 100.5800, img: jobImages.driver, description: 'Personal driver services', location: 'Sukhumvit 49' },
+  { id: 19, title: 'Auto Mechanic', company: 'Speedy Motors', category: 'service', pay: 580, rating: 4.4, lat: 13.7850, lng: 100.5250, img: jobImages.mechanic, description: 'Vehicle maintenance and repair', location: 'Huai Khwang' },
+  { id: 20, title: 'Gardener', company: 'GreenScapes', category: 'service', pay: 380, rating: 4.2, lat: 13.7400, lng: 100.5950, img: jobImages.gardener, description: 'Landscape maintenance', location: 'Bang Na' },
+  { id: 21, title: 'Private Tutor', company: 'Elite Learning', category: 'service', pay: 600, rating: 4.7, lat: 13.7550, lng: 100.5350, img: jobImages.tutor, description: 'Math and science tutoring', location: 'Siam' },
+  { id: 22, title: 'Fitness Trainer', company: 'Iron Gym', category: 'service', pay: 550, rating: 4.5, lat: 13.7250, lng: 100.5850, img: jobImages.fitness, description: 'Personal training sessions', location: 'Ekamai' },
+  { id: 23, title: 'Event Staff', company: 'PartyPro Events', category: 'hospitality', pay: 450, rating: 4.0, lat: 13.7650, lng: 100.5480, img: jobImages.event, description: 'Event setup and coordination', location: 'Ratchathewi' },
+  { id: 24, title: 'Barber', company: 'The Gentlemen Shop', category: 'service', pay: 500, rating: 4.6, lat: 13.7350, lng: 100.5550, img: jobImages.barber, description: 'Haircuts and grooming', location: 'Phrom Phong' },
+  { id: 25, title: 'Florist', company: 'Blooming Arts', category: 'retail', pay: 420, rating: 4.3, lat: 13.7480, lng: 100.5220, img: jobImages.florist, description: 'Floral arrangements and sales', location: 'Old Town' },
+  { id: 26, title: 'Baker', company: 'Sweet Crumbs Bakery', category: 'food', pay: 460, rating: 4.4, lat: 13.7150, lng: 100.5400, img: jobImages.bakery, description: 'Bread and pastry preparation', location: 'Sathorn' },
+  { id: 27, title: 'Butcher', company: 'Prime Cuts Market', category: 'food', pay: 480, rating: 4.2, lat: 13.7750, lng: 100.5180, img: jobImages.butcher, description: 'Meat preparation and sales', location: 'Yaowarat' },
+  { id: 28, title: 'Electrician', company: 'PowerFlow Electric', category: 'service', pay: 620, rating: 4.5, lat: 13.7900, lng: 100.5400, img: jobImages.electrician, description: 'Electrical installations', location: 'Ladprao' },
+  { id: 29, title: 'Plumber', company: 'Drain Masters', category: 'service', pay: 580, rating: 4.3, lat: 13.7280, lng: 100.5080, img: jobImages.plumber, description: 'Plumbing repairs and installs', location: 'Bangkok Noi' },
+  { id: 30, title: 'Painter', company: 'ColorCraft Pro', category: 'service', pay: 450, rating: 4.1, lat: 13.7580, lng: 100.5650, img: jobImages.painter, description: 'Interior and exterior painting', location: 'Wattana' }
 ];
 
 // ================= STATE =================
@@ -968,9 +1433,41 @@ let currentJobs = [...jobs];
 let selectedJob = null;
 let currentCategory = 'all';
 let currentUser = null;
+let myApplications = [];
 let chatMessages = [
-  { text: "👋 Hi! How can we help you find your next opportunity today?", type: 'business', time: new Date() }
+  { text: "Hi! How can we help you find your next opportunity today?", type: 'business', time: new Date() }
 ];
+
+// Business chat state
+let businessChatTab = 'applicants';
+let selectedContact = null;
+let businessMessages = {
+  'applicants': [
+    { id: 1, name: 'John Smith', avatar: 'JS', lastMessage: 'Thank you for the opportunity!', time: '10:30 AM', unread: 0, messages: [
+      { text: "Hi, I'm interested in the Barista position", type: 'applicant', time: new Date(Date.now() - 3600000) },
+      { text: "Thanks for applying! Can you start Monday?", type: 'business', time: new Date(Date.now() - 3000000) },
+      { text: "Yes, I can start Monday at 8 AM", type: 'applicant', time: new Date(Date.now() - 1800000) },
+      { text: "Perfect! See you then. Bring your ID.", type: 'business', time: new Date(Date.now() - 600000) },
+      { text: "Thank you for the opportunity!", type: 'applicant', time: new Date() }
+    ]},
+    { id: 2, name: 'Sarah Lee', avatar: 'SL', lastMessage: 'When is the interview?', time: '9:15 AM', unread: 2, messages: [
+      { text: "Hello, I applied for the Server position", type: 'applicant', time: new Date(Date.now() - 7200000) },
+      { text: "Hi Sarah! We'd like to interview you", type: 'business', time: new Date(Date.now() - 5400000) }
+    ]},
+    { id: 3, name: 'Mike Chen', avatar: 'MC', lastMessage: 'I have 5 years experience', time: 'Yesterday', unread: 0, messages: [
+      { text: "I'm very experienced in delivery work", type: 'applicant', time: new Date(Date.now() - 86400000) }
+    ]}
+  ],
+  'businesses': [
+    { id: 4, name: 'Hilton HR', avatar: 'HH', lastMessage: 'Your application is under review', time: '2:00 PM', unread: 1, messages: [
+      { text: "We received your application for Front Desk", type: 'business', time: new Date(Date.now() - 10800000) },
+      { text: "Thank you, when will I hear back?", type: 'applicant', time: new Date(Date.now() - 7200000) },
+      { text: "Your application is under review", type: 'business', time: new Date(Date.now() - 3600000) }
+    ]},
+    { id: 5, name: 'TechHub Recruiter', avatar: 'TR', lastMessage: 'Can you send your portfolio?', time: '11:30 AM', unread: 0, messages: []},
+    { id: 6, name: 'Grab Manager', avatar: 'GM', lastMessage: 'Orientation is tomorrow', time: 'Yesterday', unread: 0, messages: []}
+  ]
+};
 
 // ================= INIT =================
 document.addEventListener('DOMContentLoaded', () => {
@@ -981,6 +1478,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (savedUser) {
     currentUser = JSON.parse(savedUser);
     updateAuthUI();
+    loadApplications();
   }
 });
 
@@ -991,7 +1489,7 @@ function renderJobs(list) {
   if (list.length === 0) {
     container.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1;">
-        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-icon">?</div>
         <div class="empty-state-title">No jobs found</div>
         <p>Try adjusting your search or filters</p>
       </div>
@@ -999,35 +1497,63 @@ function renderJobs(list) {
     return;
   }
 
-  container.innerHTML = list.map(job => `
+  container.innerHTML = list.map(job => {
+    const applied = myApplications.find(app => app.jobId === job.id);
+    const statusBadge = applied ? getStatusBadge(applied.status) : '';
+    
+    return `
     <div class="card" data-category="${job.category}">
       <div class="card-image-wrapper">
         <img src="${job.img}" alt="${job.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/16a34a/ffffff?text=${encodeURIComponent(job.title)}'">
-        <span class="category-badge">${jobCategories[job.category].icon} ${jobCategories[job.category].label}</span>
+        <span class="category-badge">${jobCategories[job.category].label}</span>
       </div>
       <div class="card-content">
         <div class="card-title">${job.title}</div>
-        <div class="card-company">🏢 ${job.company}</div>
+        <div class="card-company">${job.company}</div>
+        <div class="card-location" onclick='pinLocation(${JSON.stringify(job)})' title="Click to pin on map">
+          ${job.location}
+        </div>
+        ${applied ? `<div class="status-badge status-${applied.status}">${getStatusText(applied.status)}</div>` : ''}
         <div class="card-meta">
-          <div class="card-pay">฿${job.pay}/day</div>
+          <div class="card-pay">$${job.pay}/day</div>
           <div class="card-rating">
-            <span class="star">⭐</span>
+            <span class="star">★</span>
             <span>${job.rating.toFixed(1)}</span>
           </div>
         </div>
         <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">${job.description}</div>
         <div class="actions">
-          <button class="btn btn-secondary" onclick='selectJob(${JSON.stringify(job)})'>📍 Map</button>
-          <button class="btn" onclick="applyJob('${job.title}')">✓ Apply</button>
+          <button class="btn btn-secondary" onclick='pinLocation(${JSON.stringify(job)})'>Map</button>
+          ${applied ? 
+            `<button class="btn btn-secondary" onclick="viewApplication(${job.id})">View</button>` :
+            `<button class="btn" onclick="applyJob(${job.id})">Apply</button>`
+          }
         </div>
       </div>
     </div>
-  `).join('');
+  `}).join('');
+}
+
+function getStatusBadge(status) {
+  const icons = {
+    pending: '⏳',
+    accepted: '✓',
+    rejected: '✕'
+  };
+  return icons[status] || '';
+}
+
+function getStatusText(status) {
+  const texts = {
+    pending: 'Pending Review',
+    accepted: 'Accepted',
+    rejected: 'Not Selected'
+  };
+  return texts[status] || status;
 }
 
 // ================= SEARCH & FILTER =================
 function handleSearch() {
-  const query = document.getElementById('searchInput').value.toLowerCase();
   filterAndRender();
 }
 
@@ -1047,7 +1573,8 @@ function filterAndRender() {
   let filtered = jobs.filter(job => {
     const matchesSearch = job.title.toLowerCase().includes(query) || 
                          job.company.toLowerCase().includes(query) ||
-                         job.description.toLowerCase().includes(query);
+                         job.description.toLowerCase().includes(query) ||
+                         job.location.toLowerCase().includes(query);
     const matchesCategory = currentCategory === 'all' || job.category === currentCategory;
     return matchesSearch && matchesCategory;
   });
@@ -1070,21 +1597,23 @@ function sortJobs(type) {
   let sorted = [...currentJobs];
   if (type === 'pay') {
     sorted.sort((a, b) => b.pay - a.pay);
-    showToast('Sorted by highest pay 💰');
+    showToast('Sorted by highest pay');
   }
   if (type === 'rating') {
     sorted.sort((a, b) => b.rating - a.rating);
-    showToast('Sorted by top rating ⭐');
+    showToast('Sorted by top rating');
   }
   currentJobs = sorted;
   renderJobs(currentJobs);
 }
 
-// ================= MAP =================
-function selectJob(job) {
+// ================= MAP & LOCATION =================
+function pinLocation(job) {
   selectedJob = job;
 
-  // Update map panel
+  // Update map panel with embedded Google Maps
+  const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10000!2d${job.lng}!3d${job.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ1JzIyLjciTiAxMDDCsDMwJzA2LjUiRQ!5e0!3m2!1sen!2sus!4v1234567890`;
+  
   document.getElementById('mapContainer').innerHTML = `
     <iframe 
       width="100%" 
@@ -1093,26 +1622,28 @@ function selectJob(job) {
       loading="lazy" 
       allowfullscreen 
       referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10000!2d${job.lng}!3d${job.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1234567890">
+      src="${mapUrl}">
     </iframe>
   `;
 
   document.getElementById('mapInfo').style.display = 'block';
   document.getElementById('closeMapBtn').style.display = 'inline-flex';
   document.getElementById('mapCompany').textContent = job.company;
-  document.getElementById('mapJob').textContent = `${job.title} • ฿${job.pay}/day`;
+  document.getElementById('mapJob').textContent = `${job.title} • $${job.pay}/day • ${job.location}`;
 
   // Scroll to map on mobile
   if (window.innerWidth <= 1024) {
     document.getElementById('mapPanel').scrollIntoView({ behavior: 'smooth' });
   }
+  
+  showToast(`Pinned: ${job.location}`);
 }
 
 function closeMap() {
   selectedJob = null;
   document.getElementById('mapContainer').innerHTML = `
     <div class="map-placeholder">
-      <div class="map-placeholder-icon">🗺️</div>
+      <div class="map-placeholder-icon">M</div>
       <p>Select a job to view location</p>
     </div>
   `;
@@ -1126,13 +1657,132 @@ function openInMaps() {
   }
 }
 
+// ================= APPLICATIONS =================
+function applyJob(jobId) {
+  if (!currentUser) {
+    showToast('Please sign in to apply for jobs');
+    openAuth();
+    return;
+  }
+
+  const job = jobs.find(j => j.id === jobId);
+  if (!job) return;
+
+  // Check if already applied
+  if (myApplications.find(app => app.jobId === jobId)) {
+    showToast('You have already applied for this position');
+    return;
+  }
+
+  // Add to applications with pending status
+  const application = {
+    jobId: job.id,
+    title: job.title,
+    company: job.company,
+    status: 'pending',
+    appliedDate: new Date(),
+    location: job.location
+  };
+  
+  myApplications.push(application);
+  saveApplications();
+  renderJobs(currentJobs);
+  renderApplications();
+  showToast(`Application submitted for ${job.title}`);
+  
+  // Show applications panel
+  document.getElementById('applicationsPanel').style.display = 'block';
+}
+
+function viewApplication(jobId) {
+  document.getElementById('applicationsPanel').scrollIntoView({ behavior: 'smooth' });
+}
+
+function renderApplications() {
+  const container = document.getElementById('applicationsList');
+  
+  if (myApplications.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">No applications yet</p>';
+    return;
+  }
+
+  container.innerHTML = myApplications.map(app => {
+    const date = new Date(app.appliedDate).toLocaleDateString();
+    return `
+      <div class="application-item">
+        <div class="application-info">
+          <div class="application-job">${app.title}</div>
+          <div class="application-company">${app.company} • Applied ${date}</div>
+        </div>
+        <div class="application-actions">
+          <span class="status-badge status-${app.status}">${getStatusText(app.status)}</span>
+          ${app.status === 'pending' ? `<button class="btn btn-small btn-secondary" onclick="withdrawApplication(${app.jobId})">Withdraw</button>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function withdrawApplication(jobId) {
+  myApplications = myApplications.filter(app => app.jobId !== jobId);
+  saveApplications();
+  renderApplications();
+  renderJobs(currentJobs);
+  showToast('Application withdrawn');
+}
+
+function toggleApplications() {
+  const panel = document.getElementById('applicationsPanel');
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    renderApplications();
+  } else {
+    panel.style.display = 'none';
+  }
+}
+
+function loadApplications() {
+  const saved = localStorage.getItem('jobseed_applications');
+  if (saved) {
+    myApplications = JSON.parse(saved);
+    if (myApplications.length > 0) {
+      document.getElementById('applicationsPanel').style.display = 'block';
+      renderApplications();
+    }
+  }
+}
+
+function saveApplications() {
+  localStorage.setItem('jobseed_applications', JSON.stringify(myApplications));
+}
+
+// Simulate status updates for demo
+setInterval(() => {
+  if (myApplications.length > 0 && Math.random() > 0.7) {
+    const pendingApps = myApplications.filter(app => app.status === 'pending');
+    if (pendingApps.length > 0) {
+      const randomApp = pendingApps[Math.floor(Math.random() * pendingApps.length)];
+      const newStatus = Math.random() > 0.5 ? 'accepted' : 'rejected';
+      randomApp.status = newStatus;
+      saveApplications();
+      renderApplications();
+      renderJobs(currentJobs);
+      showToast(`Update: ${randomApp.title} - ${getStatusText(newStatus)}`);
+    }
+  }
+}, 30000); // Check every 30 seconds
+
 // ================= AUTH =================
 function openAuth() {
   if (currentUser) {
     // Sign out
     currentUser = null;
     localStorage.removeItem('jobseed_user');
+    localStorage.removeItem('jobseed_applications');
+    myApplications = [];
     updateAuthUI();
+    document.getElementById('applicationsPanel').style.display = 'none';
+    renderJobs(currentJobs);
     showToast('Signed out successfully');
   } else {
     document.getElementById('authModal').classList.add('active');
@@ -1160,8 +1810,9 @@ function signIn() {
     localStorage.setItem('jobseed_user', JSON.stringify(currentUser));
     updateAuthUI();
     closeAuth();
-    showToast(`Welcome back, ${currentUser.name}! 🎉`);
+    showToast(`Welcome back, ${currentUser.name}!`);
     document.getElementById('authBtnText').textContent = 'Sign In';
+    loadApplications();
   }, 1000);
 }
 
@@ -1169,19 +1820,139 @@ function updateAuthUI() {
   const authBtn = document.getElementById('authBtn');
   const userInfo = document.getElementById('userInfo');
   const userName = document.getElementById('userName');
+  const userAvatar = document.getElementById('userAvatar');
 
   if (currentUser) {
     authBtn.textContent = 'Sign Out';
     userInfo.classList.add('active');
     userName.textContent = currentUser.name;
+    userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
   } else {
     authBtn.textContent = 'Sign In';
     userInfo.classList.remove('active');
     userName.textContent = 'Guest';
+    userAvatar.textContent = 'G';
   }
 }
 
-// ================= CHAT =================
+// ================= BUSINESS CHAT =================
+function openBusinessChat() {
+  document.getElementById('businessChatModal').classList.add('active');
+  renderBusinessSidebar();
+  if (selectedContact) {
+    renderBusinessMessages();
+  }
+}
+
+function closeBusinessChat() {
+  document.getElementById('businessChatModal').classList.remove('active');
+}
+
+function switchBusinessTab(tab) {
+  businessChatTab = tab;
+  selectedContact = null;
+  
+  // Update tabs
+  document.querySelectorAll('.business-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  renderBusinessSidebar();
+  document.getElementById('businessMessages').innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px;">Select a conversation</div>';
+}
+
+function renderBusinessSidebar() {
+  const container = document.getElementById('businessSidebar');
+  const contacts = businessMessages[businessChatTab];
+  
+  container.innerHTML = contacts.map(contact => `
+    <div class="business-contact ${selectedContact?.id === contact.id ? 'active' : ''}" onclick="selectContact(${contact.id})">
+      <div class="contact-avatar">${contact.avatar}</div>
+      <div class="contact-info">
+        <div class="contact-name">${contact.name}</div>
+        <div class="contact-status">${contact.lastMessage}</div>
+      </div>
+      ${contact.unread > 0 ? `<span style="background:var(--primary);color:white;padding:2px 6px;border-radius:10px;font-size:11px;">${contact.unread}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+function selectContact(contactId) {
+  const contacts = businessMessages[businessChatTab];
+  selectedContact = contacts.find(c => c.id === contactId);
+  
+  // Mark as read
+  if (selectedContact) {
+    selectedContact.unread = 0;
+  }
+  
+  renderBusinessSidebar();
+  renderBusinessMessages();
+}
+
+function renderBusinessMessages() {
+  if (!selectedContact) {
+    document.getElementById('businessMessages').innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px;">Select a conversation</div>';
+    return;
+  }
+
+  const container = document.getElementById('businessMessages');
+  container.innerHTML = selectedContact.messages.map(msg => {
+    const time = msg.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const isMe = msg.type === 'applicant' || msg.type === 'user';
+    return `
+      <div class="msg msg-${isMe ? 'user' : 'business'}">
+        ${msg.text}
+        <div class="msg-time">${time}</div>
+      </div>
+    `;
+  }).join('');
+  
+  // Scroll to bottom
+  container.scrollTop = container.scrollHeight;
+}
+
+function handleBusinessChatKeypress(e) {
+  if (e.key === 'Enter') {
+    sendBusinessMessage();
+  }
+}
+
+function sendBusinessMessage() {
+  const input = document.getElementById('businessChatInput');
+  const text = input.value.trim();
+
+  if (!text || !selectedContact) return;
+
+  // Add user message
+  const msg = { text, type: 'user', time: new Date() };
+  selectedContact.messages.push(msg);
+  selectedContact.lastMessage = text;
+  selectedContact.time = 'Just now';
+  
+  renderBusinessMessages();
+  input.value = '';
+  
+  // Simulate response after delay
+  setTimeout(() => {
+    const responses = [
+      "Thanks for your message. I'll get back to you shortly.",
+      "That sounds great! Let me check with the manager.",
+      "Can you provide more details about your availability?",
+      "We appreciate your interest in this position.",
+      "Would you be available for an interview tomorrow?"
+    ];
+    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+    
+    const botMsg = { text: randomResponse, type: 'business', time: new Date() };
+    selectedContact.messages.push(botMsg);
+    selectedContact.lastMessage = randomResponse;
+    
+    renderBusinessMessages();
+    renderBusinessSidebar();
+  }, 1500 + Math.random() * 1500);
+}
+
+// ================= SUPPORT CHAT =================
 function toggleChat() {
   const popup = document.getElementById('chatPopup');
   const fab = document.getElementById('chatFab');
@@ -1250,16 +2021,6 @@ function scrollToBottom() {
   container.scrollTop = container.scrollHeight;
 }
 
-// ================= APPLY =================
-function applyJob(jobTitle) {
-  if (!currentUser) {
-    showToast('Please sign in to apply for jobs');
-    openAuth();
-    return;
-  }
-  showToast(`Application sent for ${jobTitle}! ✓`);
-}
-
 // ================= TOAST =================
 function showToast(message) {
   const toast = document.getElementById('toast');
@@ -1277,10 +2038,15 @@ document.getElementById('authModal').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeAuth();
 });
 
+document.getElementById('businessChatModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeBusinessChat();
+});
+
 // Escape key to close modals
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeAuth();
+    closeBusinessChat();
     document.getElementById('chatPopup').classList.remove('active');
     document.getElementById('chatFab').classList.remove('hidden');
   }

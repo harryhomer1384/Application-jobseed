@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JobSeed Dashboard - Find Local Jobs</title>
+<title>JobSeed Teen Jobs - Find Local Opportunities</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
@@ -24,6 +24,8 @@
   --danger-light:#fee2e2;
   --success:#10b981;
   --success-light:#d1fae5;
+  --teen:#8b5cf6;
+  --teen-light:#ede9fe;
   --shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
   --shadow-lg:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
   --radius:12px;
@@ -79,13 +81,14 @@ h1,h2,h3{
 .logo-icon{
   width:28px;
   height:28px;
-  background:var(--primary);
+  background:linear-gradient(135deg,var(--primary),var(--teen));
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
   color:white;
-  font-size:14px;
+  font-size:12px;
+  font-weight:700;
 }
 
 .nav-actions{
@@ -176,22 +179,13 @@ h1,h2,h3{
   border-color:var(--primary);
 }
 
-.btn-warning{
-  background:var(--warning);
+.btn-teen{
+  background:var(--teen);
   color:white;
 }
 
-.btn-warning:hover{
-  background:#d97706;
-}
-
-.btn-danger{
-  background:var(--danger);
-  color:white;
-}
-
-.btn-danger:hover{
-  background:#dc2626;
+.btn-teen:hover{
+  background:#7c3aed;
 }
 
 /* ================= CONTAINER ================= */
@@ -199,6 +193,51 @@ h1,h2,h3{
   max-width:1400px;
   margin:0 auto;
   padding:24px;
+}
+
+/* ================= TEEN HERO ================= */
+.teen-hero{
+  background:linear-gradient(135deg,var(--teen-light),var(--primary-light));
+  border-radius:var(--radius);
+  padding:32px;
+  margin-bottom:24px;
+  border:1px solid var(--border);
+}
+
+.teen-hero h1{
+  font-size:32px;
+  margin-bottom:12px;
+  color:var(--text);
+}
+
+.teen-hero p{
+  color:var(--text-muted);
+  font-size:16px;
+  max-width:600px;
+}
+
+.teen-features{
+  display:flex;
+  gap:24px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+.teen-feature{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  color:var(--text);
+}
+
+.teen-badge{
+  background:var(--teen);
+  color:white;
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
 }
 
 /* ================= SEARCH & FILTERS ================= */
@@ -330,6 +369,18 @@ h1,h2,h3{
   letter-spacing:0.5px;
 }
 
+.age-badge{
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:var(--teen);
+  color:white;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:700;
+}
+
 .card-content{
   padding:16px;
   flex:1;
@@ -348,10 +399,7 @@ h1,h2,h3{
 .card-company{
   font-size:14px;
   color:var(--text-muted);
-  margin-bottom:12px;
-  display:flex;
-  align-items:center;
-  gap:4px;
+  margin-bottom:8px;
 }
 
 .card-location{
@@ -374,14 +422,14 @@ h1,h2,h3{
   color:white;
 }
 
-.card-location::before{
-  content:"";
-  width:12px;
-  height:12px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'/%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'/%3E%3C/svg%3E");
-  background-size:contain;
-  background-repeat:no-repeat;
-  display:inline-block;
+.card-schedule{
+  font-size:12px;
+  color:var(--teen);
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-weight:500;
 }
 
 .card-meta{
@@ -1064,25 +1112,6 @@ h1,h2,h3{
   margin-bottom:8px;
 }
 
-/* ================= SCROLLBAR ================= */
-::-webkit-scrollbar{
-  width:8px;
-  height:8px;
-}
-
-::-webkit-scrollbar-track{
-  background:transparent;
-}
-
-::-webkit-scrollbar-thumb{
-  background:var(--border);
-  border-radius:4px;
-}
-
-::-webkit-scrollbar-thumb:hover{
-  background:var(--text-muted);
-}
-
 /* ================= MY APPLICATIONS PANEL ================= */
 .applications-panel{
   background:white;
@@ -1144,35 +1173,23 @@ h1,h2,h3{
   gap:8px;
 }
 
-/* ================= ICONS ================= */
-.icon{
-  width:16px;
-  height:16px;
-  display:inline-block;
-  background-size:contain;
-  background-repeat:no-repeat;
-  vertical-align:middle;
+/* ================= SCROLLBAR ================= */
+::-webkit-scrollbar{
+  width:8px;
+  height:8px;
 }
 
-.icon-star::before{
-  content:"★";
-  color:#fbbf24;
+::-webkit-scrollbar-track{
+  background:transparent;
 }
 
-.icon-map::before{
-  content:"⌖";
+::-webkit-scrollbar-thumb{
+  background:var(--border);
+  border-radius:4px;
 }
 
-.icon-chat::before{
-  content:"💬";
-}
-
-.icon-briefcase::before{
-  content:"💼";
-}
-
-.icon-user::before{
-  content:"👤";
+::-webkit-scrollbar-thumb:hover{
+  background:var(--text-muted);
 }
 </style>
 <base target="_blank">
@@ -1184,7 +1201,7 @@ h1,h2,h3{
 <nav class="navbar">
   <div class="logo">
     <div class="logo-icon">JS</div>
-    JobSeed
+    JobSeed Teen Jobs
   </div>
   <div class="nav-actions">
     <div class="user-info" id="userInfo">
@@ -1199,6 +1216,30 @@ h1,h2,h3{
 
 <!-- MAIN CONTAINER -->
 <div class="container">
+
+  <!-- TEEN HERO -->
+  <div class="teen-hero">
+    <h1>Jobs for Teens</h1>
+    <p>Find flexible, age-appropriate jobs that work around your school schedule. All positions are vetted for teen safety and compliance with youth labor laws.</p>
+    <div class="teen-features">
+      <div class="teen-feature">
+        <span class="teen-badge">14+</span>
+        <span>Jobs starting at age 14</span>
+      </div>
+      <div class="teen-feature">
+        <span class="teen-badge">Flexible</span>
+        <span>After school & weekend hours</span>
+      </div>
+      <div class="teen-feature">
+        <span class="teen-badge">Safe</span>
+        <span>Parent-approved workplaces</span>
+      </div>
+      <div class="teen-feature">
+        <span class="teen-badge">No Experience</span>
+        <span>Entry-level positions</span>
+      </div>
+    </div>
+  </div>
 
   <!-- MY APPLICATIONS -->
   <div class="applications-panel" id="applicationsPanel" style="display:none;">
@@ -1219,19 +1260,21 @@ h1,h2,h3{
       <input type="text" class="search-input" id="searchInput" placeholder="Search jobs, companies, or keywords..." onkeyup="handleSearch()">
       <button class="btn" onclick="sortJobs('pay')">Top Pay</button>
       <button class="btn" onclick="sortJobs('rating')">Top Rated</button>
+      <button class="btn btn-teen" onclick="filterAge(14)">Age 14+</button>
+      <button class="btn btn-teen" onclick="filterAge(16)">Age 16+</button>
       <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
     </div>
 
     <div class="filter-row">
       <span class="filter-label">Category:</span>
       <button class="btn btn-filter active" onclick="filterCategory('all')" id="filter-all">All</button>
-      <button class="btn btn-filter" onclick="filterCategory('hospitality')" id="filter-hospitality">Hospitality</button>
-      <button class="btn btn-filter" onclick="filterCategory('retail')" id="filter-retail">Retail</button>
       <button class="btn btn-filter" onclick="filterCategory('food')" id="filter-food">Food</button>
+      <button class="btn btn-filter" onclick="filterCategory('retail')" id="filter-retail">Retail</button>
       <button class="btn btn-filter" onclick="filterCategory('service')" id="filter-service">Service</button>
-      <button class="btn btn-filter" onclick="filterCategory('transport')" id="filter-transport">Transport</button>
+      <button class="btn btn-filter" onclick="filterCategory('entertainment')" id="filter-entertainment">Fun</button>
+      <button class="btn btn-filter" onclick="filterCategory('outdoor')" id="filter-outdoor">Outdoor</button>
+      <button class="btn btn-filter" onclick="filterCategory('creative')" id="filter-creative">Creative</button>
       <button class="btn btn-filter" onclick="filterCategory('tech')" id="filter-tech">Tech</button>
-      <button class="btn btn-filter" onclick="filterCategory('healthcare')" id="filter-healthcare">Healthcare</button>
     </div>
   </div>
 
@@ -1351,121 +1394,130 @@ h1,h2,h3{
 <script>
 // ================= DATA =================
 const jobCategories = {
-  hospitality: { icon: '', label: 'Hospitality' },
-  retail: { icon: '', label: 'Retail' },
-  food: { icon: '', label: 'Food' },
-  service: { icon: '', label: 'Service' },
-  transport: { icon: '', label: 'Transport' },
-  tech: { icon: '', label: 'Tech' },
-  healthcare: { icon: '', label: 'Healthcare' }
+  food: { label: 'Food' },
+  retail: { label: 'Retail' },
+  service: { label: 'Service' },
+  entertainment: { label: 'Fun' },
+  outdoor: { label: 'Outdoor' },
+  creative: { label: 'Creative' },
+  tech: { label: 'Tech' }
 };
 
 const jobImages = {
-  barista: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop',
-  retail: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
-  hotel: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
-  waiter: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&h=300&fit=crop',
-  cleaner: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop',
-  delivery: 'https://images.unsplash.com/photo-1526367790999-015075668a5a?w=400&h=300&fit=crop',
-  spa: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&h=300&fit=crop',
-  cashier: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
-  kitchen: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=300&fit=crop',
-  assistant: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=400&h=300&fit=crop',
-  warehouse: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
-  security: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=400&h=300&fit=crop',
-  receptionist: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=300&fit=crop',
-  nurse: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop',
-  caregiver: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=400&h=300&fit=crop',
-  developer: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop',
-  designer: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=300&fit=crop',
-  driver: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop',
-  mechanic: 'https://images.unsplash.com/photo-1632823471565-1ecdf5c6dc3e?w=400&h=300&fit=crop',
-  gardener: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=300&fit=crop',
+  icecream: 'https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400&h=300&fit=crop',
+  movie: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=300&fit=crop',
+  arcade: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop',
+  babysitter: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=400&h=300&fit=crop',
+  dogwalker: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop',
+  lawnmower: 'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=400&h=300&fit=crop',
+  carwash: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=400&h=300&fit=crop',
   tutor: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop',
-  fitness: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop',
-  event: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=300&fit=crop',
-  barber: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400&h=300&fit=crop',
-  florist: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=300&fit=crop',
-  bakery: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=300&fit=crop',
-  butcher: 'https://images.unsplash.com/photo-1607623814075-e51df1bd6565?w=400&h=300&fit=crop',
-  electrician: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&h=300&fit=crop',
-  plumber: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop',
-  painter: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&h=300&fit=crop',
-  carpenter: 'https://images.unsplash.com/photo-1601058268499-e5268d3cf6c4?w=400&h=300&fit=crop'
+  grocery: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop',
+  fastfood: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=300&fit=crop',
+  library: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=400&h=300&fit=crop',
+  pool: 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=400&h=300&fit=crop',
+  camp: 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=400&h=300&fit=crop',
+  gym: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop',
+  petstore: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=400&h=300&fit=crop',
+  bookstore: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400&h=300&fit=crop',
+  cafe: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&h=300&fit=crop',
+  restaurant: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop',
+  retail: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
+  park: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop',
+  golf: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=400&h=300&fit=crop',
+  bowling: 'https://images.unsplash.com/photo-1538511052267-0216b397d8da?w=400&h=300&fit=crop',
+  skate: 'https://images.unsplash.com/photo-1564982752979-3fae1f0de3bf?w=400&h=300&fit=crop',
+  socialmedia: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop',
+  photographer: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=400&h=300&fit=crop',
+  youtuber: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&h=300&fit=crop',
+  gamer: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop',
+  craft: 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=400&h=300&fit=crop',
+  lemonade: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop',
+  newspaper: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop',
+  caddy: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=300&fit=crop'
 };
 
-// Extended jobs list with 30+ businesses
+// Teen-friendly jobs database - 30 positions
 const jobs = [
-  { id: 1, title: 'Barista', company: 'Cafe Amazon', category: 'food', pay: 450, rating: 4.5, lat: 13.7563, lng: 100.5018, img: jobImages.barista, description: 'Prepare coffee and beverages', location: 'Downtown Bangkok' },
-  { id: 2, title: 'Sales Associate', company: 'Central Mall', category: 'retail', pay: 400, rating: 4.2, lat: 13.7469, lng: 100.5393, img: jobImages.retail, description: 'Customer service and sales', location: 'Pathum Wan' },
-  { id: 3, title: 'Front Desk', company: 'Hilton Hotel', category: 'hospitality', pay: 550, rating: 4.8, lat: 13.7230, lng: 100.5240, img: jobImages.hotel, description: 'Guest check-in and assistance', location: 'Sukhumvit' },
-  { id: 4, title: 'Server', company: 'Beach Restaurant', category: 'food', pay: 420, rating: 4.3, lat: 12.9236, lng: 100.8825, img: jobImages.waiter, description: 'Table service and orders', location: 'Pattaya Beach' },
-  { id: 5, title: 'Housekeeper', company: 'CleanCo Pro', category: 'service', pay: 380, rating: 4.1, lat: 13.7278, lng: 100.5321, img: jobImages.cleaner, description: 'Hotel room cleaning', location: 'Silom' },
-  { id: 6, title: 'Delivery Driver', company: 'Grab Delivery', category: 'transport', pay: 600, rating: 4.4, lat: 13.7367, lng: 100.5231, img: jobImages.delivery, description: 'Food delivery by motorcycle', location: 'Sathorn' },
-  { id: 7, title: 'Spa Therapist', company: 'Spa Relax', category: 'hospitality', pay: 500, rating: 4.6, lat: 13.7041, lng: 100.5577, img: jobImages.spa, description: 'Massage and wellness services', location: 'Thonglor' },
-  { id: 8, title: 'Cashier', company: '7-Eleven', category: 'retail', pay: 360, rating: 3.9, lat: 13.7563, lng: 100.5018, img: jobImages.cashier, description: 'POS operations and stocking', location: 'Ratchada' },
-  { id: 9, title: 'Line Cook', company: 'Seafood Grill', category: 'food', pay: 480, rating: 4.3, lat: 13.7437, lng: 100.5626, img: jobImages.kitchen, description: 'Food preparation and cooking', location: 'Asok' },
-  { id: 10, title: 'Office Assistant', company: 'TechHub Co', category: 'service', pay: 520, rating: 4.5, lat: 13.7356, lng: 100.5814, img: jobImages.assistant, description: 'Administrative support', location: 'Rama 9' },
-  { id: 11, title: 'Warehouse Worker', company: 'Logistics Pro', category: 'service', pay: 420, rating: 4.0, lat: 13.8025, lng: 100.6130, img: jobImages.warehouse, description: 'Inventory management and packing', location: 'Ladprao' },
-  { id: 12, title: 'Security Guard', company: 'SafeGuard Security', category: 'service', pay: 400, rating: 4.1, lat: 13.7250, lng: 100.5450, img: jobImages.security, description: 'Property security and monitoring', location: 'Asoke' },
-  { id: 13, title: 'Receptionist', company: 'Grand Plaza Hotel', category: 'hospitality', pay: 480, rating: 4.4, lat: 13.7410, lng: 100.5510, img: jobImages.receptionist, description: 'Front desk and reservations', location: 'Nana' },
-  { id: 14, title: 'Nursing Assistant', company: 'Bangkok Hospital', category: 'healthcare', pay: 550, rating: 4.7, lat: 13.7450, lng: 100.5650, img: jobImages.nurse, description: 'Patient care assistance', location: 'Ploenchit' },
-  { id: 15, title: 'Caregiver', company: 'ElderCare Plus', category: 'healthcare', pay: 500, rating: 4.6, lat: 13.7680, lng: 100.5120, img: jobImages.caregiver, description: 'Elderly care and companionship', location: 'Dusit' },
-  { id: 16, title: 'Junior Developer', company: 'CodeWorks Studio', category: 'tech', pay: 800, rating: 4.8, lat: 13.7300, lng: 100.5700, img: jobImages.developer, description: 'Web development and coding', location: 'Phrom Phong' },
-  { id: 17, title: 'UI Designer', company: 'Creative Agency', category: 'tech', pay: 750, rating: 4.5, lat: 13.7200, lng: 100.5750, img: jobImages.designer, description: 'Interface design and prototyping', location: 'Thonglor' },
-  { id: 18, title: 'Private Driver', company: 'Elite Transport', category: 'transport', pay: 650, rating: 4.3, lat: 13.7100, lng: 100.5800, img: jobImages.driver, description: 'Personal driver services', location: 'Sukhumvit 49' },
-  { id: 19, title: 'Auto Mechanic', company: 'Speedy Motors', category: 'service', pay: 580, rating: 4.4, lat: 13.7850, lng: 100.5250, img: jobImages.mechanic, description: 'Vehicle maintenance and repair', location: 'Huai Khwang' },
-  { id: 20, title: 'Gardener', company: 'GreenScapes', category: 'service', pay: 380, rating: 4.2, lat: 13.7400, lng: 100.5950, img: jobImages.gardener, description: 'Landscape maintenance', location: 'Bang Na' },
-  { id: 21, title: 'Private Tutor', company: 'Elite Learning', category: 'service', pay: 600, rating: 4.7, lat: 13.7550, lng: 100.5350, img: jobImages.tutor, description: 'Math and science tutoring', location: 'Siam' },
-  { id: 22, title: 'Fitness Trainer', company: 'Iron Gym', category: 'service', pay: 550, rating: 4.5, lat: 13.7250, lng: 100.5850, img: jobImages.fitness, description: 'Personal training sessions', location: 'Ekamai' },
-  { id: 23, title: 'Event Staff', company: 'PartyPro Events', category: 'hospitality', pay: 450, rating: 4.0, lat: 13.7650, lng: 100.5480, img: jobImages.event, description: 'Event setup and coordination', location: 'Ratchathewi' },
-  { id: 24, title: 'Barber', company: 'The Gentlemen Shop', category: 'service', pay: 500, rating: 4.6, lat: 13.7350, lng: 100.5550, img: jobImages.barber, description: 'Haircuts and grooming', location: 'Phrom Phong' },
-  { id: 25, title: 'Florist', company: 'Blooming Arts', category: 'retail', pay: 420, rating: 4.3, lat: 13.7480, lng: 100.5220, img: jobImages.florist, description: 'Floral arrangements and sales', location: 'Old Town' },
-  { id: 26, title: 'Baker', company: 'Sweet Crumbs Bakery', category: 'food', pay: 460, rating: 4.4, lat: 13.7150, lng: 100.5400, img: jobImages.bakery, description: 'Bread and pastry preparation', location: 'Sathorn' },
-  { id: 27, title: 'Butcher', company: 'Prime Cuts Market', category: 'food', pay: 480, rating: 4.2, lat: 13.7750, lng: 100.5180, img: jobImages.butcher, description: 'Meat preparation and sales', location: 'Yaowarat' },
-  { id: 28, title: 'Electrician', company: 'PowerFlow Electric', category: 'service', pay: 620, rating: 4.5, lat: 13.7900, lng: 100.5400, img: jobImages.electrician, description: 'Electrical installations', location: 'Ladprao' },
-  { id: 29, title: 'Plumber', company: 'Drain Masters', category: 'service', pay: 580, rating: 4.3, lat: 13.7280, lng: 100.5080, img: jobImages.plumber, description: 'Plumbing repairs and installs', location: 'Bangkok Noi' },
-  { id: 30, title: 'Painter', company: 'ColorCraft Pro', category: 'service', pay: 450, rating: 4.1, lat: 13.7580, lng: 100.5650, img: jobImages.painter, description: 'Interior and exterior painting', location: 'Wattana' }
+  { id: 1, title: 'Ice Cream Scooper', company: 'Sweet Scoops', category: 'food', pay: 12, rating: 4.6, minAge: 14, lat: 13.7563, lng: 100.5018, img: jobImages.icecream, description: 'Serve ice cream and keep shop clean', location: 'Downtown Mall', schedule: 'After school, Weekends' },
+  { id: 2, title: 'Movie Theater Attendant', company: 'Cinema City', category: 'entertainment', pay: 13, rating: 4.5, minAge: 15, lat: 13.7469, lng: 100.5393, img: jobImages.movie, description: 'Take tickets, sell snacks, clean theaters', location: 'Sukhumvit Complex', schedule: 'Evenings, Weekends' },
+  { id: 3, title: 'Arcade Assistant', company: 'GameZone', category: 'entertainment', pay: 11, rating: 4.7, minAge: 16, lat: 13.7230, lng: 100.5240, img: jobImages.arcade, description: 'Help customers, manage tokens, fix machines', location: 'Central Plaza', schedule: 'Flexible hours' },
+  { id: 4, title: 'Babysitter', company: 'CareConnect', category: 'service', pay: 15, rating: 4.8, minAge: 16, lat: 12.9236, lng: 100.8825, img: jobImages.babysitter, description: 'Watch kids while parents are out', location: 'Various locations', schedule: 'Evenings, Weekends' },
+  { id: 5, title: 'Dog Walker', company: 'PawPals', category: 'outdoor', pay: 14, rating: 4.6, minAge: 14, lat: 13.7278, lng: 100.5321, img: jobImages.dogwalker, description: 'Walk dogs in your neighborhood', location: 'Your area', schedule: 'After school, Mornings' },
+  { id: 6, title: 'Lawn Mower', company: 'GreenTeens', category: 'outdoor', pay: 18, rating: 4.4, minAge: 14, lat: 13.7367, lng: 100.5231, img: jobImages.lawnmower, description: 'Mow lawns and do yard work', location: 'Local neighborhoods', schedule: 'Weekends, Summer' },
+  { id: 7, title: 'Car Wash Attendant', company: 'SparkleWash', category: 'service', pay: 12, rating: 4.3, minAge: 15, lat: 13.7041, lng: 100.5577, img: jobImages.carwash, description: 'Wash and dry cars', location: 'Gas Station Plaza', schedule: 'Weekends, Summer' },
+  { id: 8, title: 'Peer Tutor', company: 'StudyBuddies', category: 'creative', pay: 16, rating: 4.7, minAge: 16, lat: 13.7563, lng: 100.5018, img: jobImages.tutor, description: 'Help younger students with homework', location: 'Library or Online', schedule: 'After school' },
+  { id: 9, title: 'Grocery Bagger', company: 'FreshMart', category: 'retail', pay: 11, rating: 4.2, minAge: 14, lat: 13.7437, lng: 100.5626, img: jobImages.grocery, description: 'Bag groceries and help customers', location: 'Neighborhood Store', schedule: 'After school, Weekends' },
+  { id: 10, title: 'Fast Food Crew', company: 'Burger Barn', category: 'food', pay: 12, rating: 4.1, minAge: 15, lat: 13.7356, lng: 100.5814, img: jobImages.fastfood, description: 'Take orders, serve food, clean', location: 'Food Court', schedule: 'Evenings, Weekends' },
+  { id: 11, title: 'Library Assistant', company: 'City Library', category: 'creative', pay: 13, rating: 4.5, minAge: 15, lat: 13.7691, lng: 100.5429, img: jobImages.library, description: 'Shelve books, help patrons', location: 'Main Library', schedule: 'After school, Saturdays' },
+  { id: 12, title: 'Lifeguard', company: 'AquaCenter', category: 'outdoor', pay: 16, rating: 4.8, minAge: 16, lat: 13.7319, lng: 100.5647, img: jobImages.pool, description: 'Supervise swimmers (certification required)', location: 'Community Pool', schedule: 'Summer, Weekends' },
+  { id: 13, title: 'Camp Counselor', company: 'SummerFun Camp', category: 'entertainment', pay: 14, rating: 4.9, minAge: 16, lat: 13.7450, lng: 100.5650, img: jobImages.camp, description: 'Lead activities for younger kids', location: 'City Park', schedule: 'Summer only' },
+  { id: 14, title: 'Gym Front Desk', company: 'FitZone', category: 'service', pay: 12, rating: 4.4, minAge: 16, lat: 13.7680, lng: 100.5120, img: jobImages.gym, description: 'Check in members, clean equipment', location: 'Fitness Center', schedule: 'Evenings, Weekends' },
+  { id: 15, title: 'Pet Store Helper', company: 'Pet Paradise', category: 'retail', pay: 11, rating: 4.6, minAge: 15, lat: 13.7300, lng: 100.5700, img: jobImages.petstore, description: 'Feed animals, clean cages, help customers', location: 'Pet Mall', schedule: 'Weekends' },
+  { id: 16, title: 'Bookstore Clerk', company: 'Readers Corner', category: 'retail', pay: 12, rating: 4.5, minAge: 15, lat: 13.7200, lng: 100.5750, img: jobImages.bookstore, description: 'Organize shelves, recommend books', location: 'Shopping Center', schedule: 'After school' },
+  { id: 17, title: 'Cafe Assistant', company: 'Coffee Corner', category: 'food', pay: 13, rating: 4.3, minAge: 16, lat: 13.7100, lng: 100.5800, img: jobImages.cafe, description: 'Make drinks, serve pastries', location: 'Downtown', schedule: 'Mornings, Weekends' },
+  { id: 18, title: 'Restaurant Host', company: 'Family Diner', category: 'food', pay: 11, rating: 4.2, minAge: 15, lat: 13.7850, lng: 100.5250, img: jobImages.restaurant, description: 'Seat guests, manage waitlist', location: 'Main Street', schedule: 'Dinner shifts' },
+  { id: 19, title: 'Retail Associate', company: 'Trendy Teens', category: 'retail', pay: 12, rating: 4.4, minAge: 16, lat: 13.7400, lng: 100.5950, img: jobImages.retail, description: 'Help customers, organize stock', location: 'Mall', schedule: 'Flexible' },
+  { id: 20, title: 'Park Maintenance', company: 'City Parks Dept', category: 'outdoor', pay: 14, rating: 4.3, minAge: 16, lat: 13.7550, lng: 100.5350, img: jobImages.park, description: 'Clean up, maintain trails', location: 'City Park', schedule: 'Summer, Weekends' },
+  { id: 21, title: 'Golf Caddy', company: 'Green Hills Golf', category: 'outdoor', pay: 20, rating: 4.7, minAge: 14, lat: 13.7250, lng: 100.5850, img: jobImages.golf, description: 'Carry clubs, give advice', location: 'Golf Course', schedule: 'Weekends, Summer' },
+  { id: 22, title: 'Bowling Alley Attendant', company: 'Strike Zone', category: 'entertainment', pay: 11, rating: 4.5, minAge: 15, lat: 13.7650, lng: 100.5480, img: jobImages.bowling, description: 'Set up lanes, serve food', location: 'Entertainment Center', schedule: 'Evenings, Weekends' },
+  { id: 23, title: 'Skate Shop Helper', company: 'BoardLife', category: 'retail', pay: 12, rating: 4.6, minAge: 16, lat: 13.7350, lng: 100.5550, img: jobImages.skate, description: 'Sell gear, organize shop', location: 'Skate Park', schedule: 'After school' },
+  { id: 24, title: 'Social Media Helper', company: 'Local Biz', category: 'tech', pay: 15, rating: 4.5, minAge: 16, lat: 13.7480, lng: 100.5220, img: jobImages.socialmedia, description: 'Post updates, take photos', location: 'Remote/Local', schedule: 'Flexible' },
+  { id: 25, title: 'Photography Assistant', company: 'Picture Perfect', category: 'creative', pay: 14, rating: 4.6, minAge: 16, lat: 13.7150, lng: 100.5400, img: jobImages.photographer, description: 'Help at events, edit photos', location: 'Various', schedule: 'Weekends' },
+  { id: 26, title: 'YouTube Content Helper', company: 'Creators Hub', category: 'tech', pay: 13, rating: 4.4, minAge: 16, lat: 13.7750, lng: 100.5180, img: jobImages.youtuber, description: 'Edit videos, manage comments', location: 'Remote', schedule: 'Flexible' },
+  { id: 27, title: 'Gaming Tournament Host', company: 'eSports Center', category: 'entertainment', pay: 12, rating: 4.7, minAge: 16, lat: 13.7900, lng: 100.5400, img: jobImages.gamer, description: 'Run tournaments, help players', location: 'Gaming Cafe', schedule: 'Weekends' },
+  { id: 28, title: 'Craft Fair Seller', company: 'Handmade Market', category: 'creative', pay: 18, rating: 4.5, minAge: 14, lat: 13.7280, lng: 100.5080, img: jobImages.craft, description: 'Sell handmade items', location: 'Weekend Markets', schedule: 'Weekends' },
+  { id: 29, title: 'Lemonade Stand Mentor', company: 'Young Entrepreneurs', category: 'creative', pay: 16, rating: 4.3, minAge: 14, lat: 13.7580, lng: 100.5650, img: jobImages.lemonade, description: 'Help younger kids run stands', location: 'Community events', schedule: 'Summer weekends' },
+  { id: 30, title: 'Newspaper Deliverer', company: 'Daily News', category: 'outdoor', pay: 13, rating: 4.0, minAge: 14, lat: 13.7350, lng: 100.5320, img: jobImages.newspaper, description: 'Deliver papers on bike', location: 'Your neighborhood', schedule: 'Early mornings' }
 ];
 
+// ================= DATA =================
+
+// (keep everything above the same)
+
 // ================= STATE =================
+
+// 💰 Currency Conversion
+const USD_TO_THB = 6;
+function toTHB(usd) {
+  return Math.round(usd * USD_TO_THB);
+}
+
 let currentJobs = [...jobs];
 let selectedJob = null;
 let currentCategory = 'all';
+let currentAgeFilter = null;
 let currentUser = null;
 let myApplications = [];
-let chatMessages = [
-  { text: "Hi! How can we help you find your next opportunity today?", type: 'business', time: new Date() }
-];
 
 // Business chat state
 let businessChatTab = 'applicants';
 let selectedContact = null;
 let businessMessages = {
   'applicants': [
-    { id: 1, name: 'John Smith', avatar: 'JS', lastMessage: 'Thank you for the opportunity!', time: '10:30 AM', unread: 0, messages: [
-      { text: "Hi, I'm interested in the Barista position", type: 'applicant', time: new Date(Date.now() - 3600000) },
+    { id: 1, name: 'Alex Johnson', avatar: 'AJ', lastMessage: 'Thank you for the opportunity!', time: '10:30 AM', unread: 0, messages: [
+      { text: "Hi, I'm interested in the Ice Cream Scooper position", type: 'applicant', time: new Date(Date.now() - 3600000) },
       { text: "Thanks for applying! Can you start Monday?", type: 'business', time: new Date(Date.now() - 3000000) },
-      { text: "Yes, I can start Monday at 8 AM", type: 'applicant', time: new Date(Date.now() - 1800000) },
+      { text: "Yes, I can start Monday at 4 PM after school", type: 'applicant', time: new Date(Date.now() - 1800000) },
       { text: "Perfect! See you then. Bring your ID.", type: 'business', time: new Date(Date.now() - 600000) },
       { text: "Thank you for the opportunity!", type: 'applicant', time: new Date() }
     ]},
-    { id: 2, name: 'Sarah Lee', avatar: 'SL', lastMessage: 'When is the interview?', time: '9:15 AM', unread: 2, messages: [
-      { text: "Hello, I applied for the Server position", type: 'applicant', time: new Date(Date.now() - 7200000) },
-      { text: "Hi Sarah! We'd like to interview you", type: 'business', time: new Date(Date.now() - 5400000) }
+    { id: 2, name: 'Maya Chen', avatar: 'MC', lastMessage: 'When is the interview?', time: '9:15 AM', unread: 2, messages: [
+      { text: "Hello, I applied for the Movie Theater position", type: 'applicant', time: new Date(Date.now() - 7200000) },
+      { text: "Hi Maya! We'd like to interview you this weekend", type: 'business', time: new Date(Date.now() - 5400000) }
     ]},
-    { id: 3, name: 'Mike Chen', avatar: 'MC', lastMessage: 'I have 5 years experience', time: 'Yesterday', unread: 0, messages: [
-      { text: "I'm very experienced in delivery work", type: 'applicant', time: new Date(Date.now() - 86400000) }
+    { id: 3, name: 'Jordan Smith', avatar: 'JS', lastMessage: 'I have experience with dogs', time: 'Yesterday', unread: 0, messages: [
+      { text: "I'm very experienced with pets and would love to walk dogs", type: 'applicant', time: new Date(Date.now() - 86400000) }
     ]}
   ],
   'businesses': [
-    { id: 4, name: 'Hilton HR', avatar: 'HH', lastMessage: 'Your application is under review', time: '2:00 PM', unread: 1, messages: [
-      { text: "We received your application for Front Desk", type: 'business', time: new Date(Date.now() - 10800000) },
-      { text: "Thank you, when will I hear back?", type: 'applicant', time: new Date(Date.now() - 7200000) },
-      { text: "Your application is under review", type: 'business', time: new Date(Date.now() - 3600000) }
+    { id: 4, name: 'Sweet Scoops Manager', avatar: 'SS', lastMessage: 'Your application is under review', time: '2:00 PM', unread: 1, messages: [
+      { text: "We received your application for Ice Cream Scooper", type: 'business', time: new Date(Date.now() - 10800000) },
+      { text: "Thank you, when will I hear back? I'm available weekends", type: 'applicant', time: new Date(Date.now() - 7200000) },
+      { text: "Your application is under review. We'll call this week!", type: 'business', time: new Date(Date.now() - 3600000) }
     ]},
-    { id: 5, name: 'TechHub Recruiter', avatar: 'TR', lastMessage: 'Can you send your portfolio?', time: '11:30 AM', unread: 0, messages: []},
-    { id: 6, name: 'Grab Manager', avatar: 'GM', lastMessage: 'Orientation is tomorrow', time: 'Yesterday', unread: 0, messages: []}
+    { id: 5, name: 'Cinema City HR', avatar: 'CC', lastMessage: 'Can you work evening shifts?', time: '11:30 AM', unread: 0, messages: []},
+    { id: 6, name: 'PawPals Owner', avatar: 'PP', lastMessage: 'Orientation is Saturday', time: 'Yesterday', unread: 0, messages: []}
   ]
 };
 
@@ -1499,13 +1551,13 @@ function renderJobs(list) {
 
   container.innerHTML = list.map(job => {
     const applied = myApplications.find(app => app.jobId === job.id);
-    const statusBadge = applied ? getStatusBadge(applied.status) : '';
     
     return `
     <div class="card" data-category="${job.category}">
       <div class="card-image-wrapper">
         <img src="${job.img}" alt="${job.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/16a34a/ffffff?text=${encodeURIComponent(job.title)}'">
         <span class="category-badge">${jobCategories[job.category].label}</span>
+        <span class="age-badge">${job.minAge}+</span>
       </div>
       <div class="card-content">
         <div class="card-title">${job.title}</div>
@@ -1513,9 +1565,10 @@ function renderJobs(list) {
         <div class="card-location" onclick='pinLocation(${JSON.stringify(job)})' title="Click to pin on map">
           ${job.location}
         </div>
+        <div class="card-schedule">${job.schedule}</div>
         ${applied ? `<div class="status-badge status-${applied.status}">${getStatusText(applied.status)}</div>` : ''}
         <div class="card-meta">
-          <div class="card-pay">$${job.pay}/day</div>
+          <div class="card-pay">฿${toTHB(job.pay)}/hr</div>
           <div class="card-rating">
             <span class="star">★</span>
             <span>${job.rating.toFixed(1)}</span>
@@ -1534,15 +1587,6 @@ function renderJobs(list) {
   `}).join('');
 }
 
-function getStatusBadge(status) {
-  const icons = {
-    pending: '⏳',
-    accepted: '✓',
-    rejected: '✕'
-  };
-  return icons[status] || '';
-}
-
 function getStatusText(status) {
   const texts = {
     pending: 'Pending Review',
@@ -1559,12 +1603,15 @@ function handleSearch() {
 
 function filterCategory(category) {
   currentCategory = category;
-
-  // Update active button
   document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
   document.getElementById(`filter-${category}`).classList.add('active');
-
   filterAndRender();
+}
+
+function filterAge(age) {
+  currentAgeFilter = age;
+  filterAndRender();
+  showToast(`Showing jobs for age ${age}+`);
 }
 
 function filterAndRender() {
@@ -1576,7 +1623,8 @@ function filterAndRender() {
                          job.description.toLowerCase().includes(query) ||
                          job.location.toLowerCase().includes(query);
     const matchesCategory = currentCategory === 'all' || job.category === currentCategory;
-    return matchesSearch && matchesCategory;
+    const matchesAge = !currentAgeFilter || job.minAge <= currentAgeFilter;
+    return matchesSearch && matchesCategory && matchesAge;
   });
 
   currentJobs = filtered;
@@ -1586,6 +1634,7 @@ function filterAndRender() {
 function resetFilters() {
   document.getElementById('searchInput').value = '';
   currentCategory = 'all';
+  currentAgeFilter = null;
   document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
   document.getElementById('filter-all').classList.add('active');
   currentJobs = [...jobs];
@@ -1610,8 +1659,6 @@ function sortJobs(type) {
 // ================= MAP & LOCATION =================
 function pinLocation(job) {
   selectedJob = job;
-
-  // Update map panel with embedded Google Maps
   const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10000!2d${job.lng}!3d${job.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ1JzIyLjciTiAxMDDCsDMwJzA2LjUiRQ!5e0!3m2!1sen!2sus!4v1234567890`;
   
   document.getElementById('mapContainer').innerHTML = `
@@ -1629,9 +1676,8 @@ function pinLocation(job) {
   document.getElementById('mapInfo').style.display = 'block';
   document.getElementById('closeMapBtn').style.display = 'inline-flex';
   document.getElementById('mapCompany').textContent = job.company;
-  document.getElementById('mapJob').textContent = `${job.title} • $${job.pay}/day • ${job.location}`;
+  document.getElementById('mapJob').textContent = `${job.title} • ฿${toTHB(job.pay)}/hr • ${job.location}`;
 
-  // Scroll to map on mobile
   if (window.innerWidth <= 1024) {
     document.getElementById('mapPanel').scrollIntoView({ behavior: 'smooth' });
   }
@@ -1668,13 +1714,11 @@ function applyJob(jobId) {
   const job = jobs.find(j => j.id === jobId);
   if (!job) return;
 
-  // Check if already applied
   if (myApplications.find(app => app.jobId === jobId)) {
     showToast('You have already applied for this position');
     return;
   }
 
-  // Add to applications with pending status
   const application = {
     jobId: job.id,
     title: job.title,
@@ -1688,9 +1732,8 @@ function applyJob(jobId) {
   saveApplications();
   renderJobs(currentJobs);
   renderApplications();
-  showToast(`Application submitted for ${job.title}`);
+  showToast(`Application submitted for ${job.title}!`);
   
-  // Show applications panel
   document.getElementById('applicationsPanel').style.display = 'block';
 }
 
@@ -1705,7 +1748,7 @@ function renderApplications() {
     container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">No applications yet</p>';
     return;
   }
-
+  
   container.innerHTML = myApplications.map(app => {
     const date = new Date(app.appliedDate).toLocaleDateString();
     return `
@@ -1770,12 +1813,11 @@ setInterval(() => {
       showToast(`Update: ${randomApp.title} - ${getStatusText(newStatus)}`);
     }
   }
-}, 30000); // Check every 30 seconds
+}, 30000);
 
 // ================= AUTH =================
 function openAuth() {
   if (currentUser) {
-    // Sign out
     currentUser = null;
     localStorage.removeItem('jobseed_user');
     localStorage.removeItem('jobseed_applications');
@@ -1802,7 +1844,6 @@ function signIn() {
     return;
   }
 
-  // Simulate auth
   document.getElementById('authBtnText').innerHTML = '<span class="loading"></span>';
 
   setTimeout(() => {
@@ -1852,7 +1893,6 @@ function switchBusinessTab(tab) {
   businessChatTab = tab;
   selectedContact = null;
   
-  // Update tabs
   document.querySelectorAll('.business-tab').forEach(t => t.classList.remove('active'));
   event.target.classList.add('active');
   
@@ -1880,7 +1920,6 @@ function selectContact(contactId) {
   const contacts = businessMessages[businessChatTab];
   selectedContact = contacts.find(c => c.id === contactId);
   
-  // Mark as read
   if (selectedContact) {
     selectedContact.unread = 0;
   }
@@ -1907,7 +1946,6 @@ function renderBusinessMessages() {
     `;
   }).join('');
   
-  // Scroll to bottom
   container.scrollTop = container.scrollHeight;
 }
 
@@ -1923,7 +1961,6 @@ function sendBusinessMessage() {
 
   if (!text || !selectedContact) return;
 
-  // Add user message
   const msg = { text, type: 'user', time: new Date() };
   selectedContact.messages.push(msg);
   selectedContact.lastMessage = text;
@@ -1932,7 +1969,6 @@ function sendBusinessMessage() {
   renderBusinessMessages();
   input.value = '';
   
-  // Simulate response after delay
   setTimeout(() => {
     const responses = [
       "Thanks for your message. I'll get back to you shortly.",
@@ -1979,14 +2015,12 @@ function sendChatMessage() {
 
   if (!text) return;
 
-  // Add user message
   const userMsg = { text, type: 'user', time: new Date() };
   chatMessages.push(userMsg);
   renderChat();
   input.value = '';
   scrollToBottom();
 
-  // Simulate response
   setTimeout(() => {
     const responses = [
       "Thanks for reaching out! A team member will get back to you shortly.",
@@ -2033,7 +2067,6 @@ function showToast(message) {
 }
 
 // ================= UTILS =================
-// Close modal on outside click
 document.getElementById('authModal').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeAuth();
 });
@@ -2042,7 +2075,6 @@ document.getElementById('businessChatModal').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeBusinessChat();
 });
 
-// Escape key to close modals
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeAuth();
